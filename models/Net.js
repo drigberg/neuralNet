@@ -60,7 +60,7 @@ class Net {
         successes += correct ? 1 : 0
 
 
-        if (predictions % Math.pow(10, power) == 0) {
+        if (predictions % Math.pow(5, power) == 0) {
             power += 1
             console.log(`Iteration #${predictions}: ${successes / predictions * 100}% accuracy`)
         }

@@ -1,7 +1,7 @@
 // partly based on https://github.com/cazala/synaptic/blob/master/src/Neuron.js
 
-const Net = require("./models/Net")
-const rectifiers = require("./lib/rectifiers")
+const Net = require("../models/Net")
+const rectifiers = require("../lib/rectifiers")
 
 let net = new Net({
     "input_length": 2,
@@ -18,7 +18,7 @@ net.addLayer({
     "rectifier": rectifiers.step,
 })
 
-for (var i = 0; i < 50000; i++) {
+for (var i = 0; i < 80000; i++) {
     let input = []
     let target = [0]
 
