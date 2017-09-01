@@ -1,4 +1,7 @@
 const Layer = require("./Layer")
+let predictions = 0
+let successes = 0
+let power = 1
 
 class Net {
     constructor({ input_length, learning_rate }) {
@@ -19,39 +22,56 @@ class Net {
     }
 
     predict(input) {
-        return new Promise((resolve) => {
-            for (var i = 0; i < input.length; i++) {
-                this.input.neurons[i].activation = input[i]
-            }
+        if (! (input instanceof Array)) {
+            throw new Error("Input must be an array!")
+        }
 
-            for (var i = 0; i < this.layers.length; i++) {
-                this.layers[i].activate()
-            }
+        for (var i = 0; i < input.length; i++) {
+            this.input.neurons[i].activation = input[i]
+        }
 
-            return resolve(this.finalLayer().activate())
-        })
+        for (var i = 0; i < this.layers.length; i++) {
+            this.layers[i].activate()
+        }
+
+        return this.finalLayer().activate()
     }
 
     backPropagate(target) {
-        return new Promise((resolve) => {
-            this.finalLayer().propagate(target)
+        this.finalLayer().propagate(target)
 
-            for (var i = input.length - 2; i >= 0; i--) {
-                this.layers[i].propagate()
-            }
-        })
+        for (var i = this.layers.length - 2; i >= 0; i--) {
+            this.layers[i].propagate()
+        }
     }
 
-    learn(input) {
-        return this.predict(input)
-        .then(() => {
-            return this.backPropagate()
-        })
+    learn(input, target) {
+        let prediction = this.predict(input)
+        let correct = true
+        for (var i = 0; i < target.length; i++) {
+            prediction[i] = prediction[i] > 0.5 ? 1 : 0
+            if (target[i] !== prediction[i]) {
+                correct = false
+                break
+            }
+        }
+
+        predictions += 1
+        successes += correct ? 1 : 0
+
+
+        if (predictions % Math.pow(10, power) == 0) {
+            power += 1
+            console.log(`Iteration #${predictions}: ${successes / predictions * 100}% accuracy`)
+        }
+        this.backPropagate(target)
     }
 
     addLayer(layer_args) {
+        let in_layer = this.finalLayer() || this.input
+
         Object.assign(layer_args, {
-            "in_layer": this.finalLayer() || this.input,
+            "in_layer": in_layer,
             "net": this
         })
 

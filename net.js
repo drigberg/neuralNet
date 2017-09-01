@@ -2,30 +2,48 @@
 
 const Net = require("./models/Net")
 const rectifiers = require("./lib/rectifiers")
-
-let bias = -0.5
+const fs = require("fs")
 
 let net = new Net({
-    "input_length": 3,
-    "learning_rate": 0.01
+    "input_length": 2,
+    "learning_rate": 0.05
+})
+
+// net.addLayer({
+//     "num_neurons": 10,
+//     "rectifier": rectifiers.sigmoid,
+//     "randomly_disconnected": true
+// })
+
+
+net.addLayer({
+    "num_neurons": 3,
+    "rectifier": rectifiers.relu
 })
 
 net.addLayer({
-    "bias": bias,
-    "num_neurons": 20,
-    "rectifier": rectifiers.relu,
+    "num_neurons": 1,
+    "rectifier": rectifiers.step,
 })
 
-net.addLayer({
-    "bias": bias,
-    "num_neurons": 2,
-    "rectifier": rectifiers.sigmoid,
-})
+// let file_data = fs.readFileSync("./data/training.json")
+// let data = JSON.parse(file_data)
+// let keys = Object.keys(data)
 
-let input = [-100, 50, 3]
+for (var i = 0; i < 50000; i++) {
+    let input = []
+    let target = [0]
 
-net.predict(input)
-.then((res) => {
-    console.log(res)
-})
+    for (var j = 0; j < 2; j++) {
+        let num = Math.random() >= 0.5 ? 1 : 0
+        input.push(num)
+    }
+
+    if (input[0] + input[1] === 1) {
+        target = [1]
+    }
+
+    net.learn(input, target)
+}
+
 
