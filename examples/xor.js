@@ -3,7 +3,7 @@
 const Net = require("../models/Net")
 const rectifiers = require("../lib/rectifiers")
 
-let net = new Net({
+const net = new Net({
     "input_length": 2,
     "learning_rate": 0.05
 })
