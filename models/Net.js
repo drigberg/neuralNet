@@ -1,4 +1,6 @@
 const Layer = require("./Layer")
+let predictions = 0
+let successes = 0
 
 class Net {
     constructor({ input_length, learning_rate }) {
@@ -19,38 +21,47 @@ class Net {
     }
 
     predict(input) {
-        return new Promise((resolve) => {
-            if (! (input instanceof Array)) {
-                throw new Error("Input must be an array!")
-            }
+        if (! (input instanceof Array)) {
+            throw new Error("Input must be an array!")
+        }
 
-            for (var i = 0; i < input.length; i++) {
-                this.input.neurons[i].activation = input[i]
-            }
+        for (var i = 0; i < input.length; i++) {
+            this.input.neurons[i].activation = input[i]
+        }
 
-            for (var i = 0; i < this.layers.length; i++) {
-                this.layers[i].activate()
-            }
+        for (var i = 0; i < this.layers.length; i++) {
+            this.layers[i].activate()
+        }
 
-            return resolve(this.finalLayer().activate())
-        })
+        return this.finalLayer().activate()
     }
 
     backPropagate(target) {
-        return new Promise((resolve) => {
-            this.finalLayer().propagate(target)
+        this.finalLayer().propagate(target)
 
-            for (var i = this.layers.length - 2; i >= 0; i--) {
-                this.layers[i].propagate()
-            }
-        })
+        for (var i = this.layers.length - 2; i >= 0; i--) {
+            this.layers[i].propagate()
+        }
     }
 
     learn(input, target) {
-        return this.predict(input)
-        .then((prediction) => {
-            return this.backPropagate(target)
-        })
+        let prediction = this.predict(input)
+        let correct = true
+        for (var i = 0; i < target.length; i++) {
+            prediction[i] = prediction[i] > 0.5 ? 1 : 0
+            if (target[i] !== prediction[i]) {
+                correct = false
+                break
+            }
+        }
+
+        predictions += 1
+        successes += correct ? 1 : 0
+
+        if (predictions % 50 == 0) {
+            console.log(`${successes / predictions * 100}% accuracy`)
+        }
+        this.backPropagate(target)
     }
 
     addLayer(layer_args) {

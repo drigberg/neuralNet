@@ -7,9 +7,10 @@ class Neuron {
         return neurons ++
     }
 
-    constructor({ bias, in_layer, layer }) {
+    constructor({ in_layer, layer, randomly_disconnected }) {
         this._id = Neuron.uuid()
         this.layer = layer
+        this.randomly_disconnected = randomly_disconnected
 
         this.connections = {
             "out": {},
@@ -18,33 +19,38 @@ class Neuron {
 
         // create connections to all neurons in input layer
         if (in_layer) {
-            this.bias = bias
+            this.bias = Math.random() * 0.1 - 0.2
 
             let sum = 0
 
             for (var i = 0; i < in_layer.neurons.length; i++) {
-                let neuron = in_layer.neurons[i]
-                let weight = Math.random()
-                sum += weight
+                let connect = true
+                if (this.randomly_disconnected) {
+                    connect = false
+                }
 
-                let bias = Math.random() * 0.3
-                let connection = new Connection(neuron, this, weight, bias)
+                if (connect) {
+                    let neuron = in_layer.neurons[i]
+                    let weight = Math.random()
+                    sum += weight
 
-                // update on both ends of the connection
-                this.connections.in[neuron._id] = connection
-                neuron.connections.out[this._id] = connection
+                    let bias = Math.random() * 0.3
+                    let connection = new Connection(neuron, this, weight, bias)
+
+                    // update on both ends of the connection
+                    this.connections.in[neuron._id] = connection
+                    neuron.connections.out[this._id] = connection
+                }
             }
 
             // ensure that all weights add to 1
             let multiplier = 1 / sum
-
             let keys = Object.keys(this.connections.in)
             for (var j = 0; j < keys.length; j++) {
                 let key = keys[j]
                 this.connections.in[key].multiplyBy(multiplier)
             }
         }
-
     }
 
     activate() {
@@ -62,7 +68,7 @@ class Neuron {
     }
 
     propagate(target) {
-        if (target) {
+        if (target !== null) {
             this.error = target - this.activation
         } else {
             let error = 0
@@ -74,16 +80,14 @@ class Neuron {
                 let connection = connections[key]
                 error += connection.out_neuron.error * connection.weight
             })
-
             this.error = this.derivative * error
         }
 
         // LEARN
         let keys = Object.keys(this.connections.in)
         for (var j = 0; j < keys.length; j++) {
-            let key = keys[j]
-            let connection = this.connections.in[key]
-            let gradient = this.error * connection.in_neuron.activation
+            let connection = this.connections.in[keys[j]]
+            let gradient = this.error * connection.in_neuron.activation * connection.weight
             connection.weight += this.layer.net.learning_rate * gradient
         }
 

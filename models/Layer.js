@@ -1,11 +1,12 @@
 const Neuron = require("./Neuron")
 
 class Layer {
-    constructor({ num_neurons, in_layer, bias, rectifier, net, is_input }) {
+    constructor({ num_neurons, in_layer, bias, rectifier, net, is_input, randomly_disconnected }) {
         this.net = net
+        this.randomly_disconnected = randomly_disconnected
         this.neurons = []
 
-        let neuron_args = { "layer": this }
+        let neuron_args = { "layer": this, "randomly_disconnected": this.randomly_disconnected }
 
         if (!is_input) {
             this.rectifier = rectifier
@@ -28,7 +29,6 @@ class Layer {
     propagate(target_vector) {
         for (var i = 0; i < this.neurons.length; i++) {
             let target = target_vector ? target_vector[i] : null
-
             this.neurons[i].propagate(target)
         }
     }

@@ -4,49 +4,51 @@ const Net = require("./models/Net")
 const rectifiers = require("./lib/rectifiers")
 const fs = require("fs")
 
-let bias = 0
-
 let net = new Net({
-    "input_length": 3,
-    "learning_rate": 0.1
+    "input_length": 2,
+    "learning_rate": 0.01
+})
+
+// net.addLayer({
+//     "num_neurons": 10,
+//     "rectifier": rectifiers.sigmoid,
+//     "randomly_disconnected": true
+// })
+
+
+net.addLayer({
+    "num_neurons": 40,
+    "rectifier": rectifiers.tanh,
 })
 
 net.addLayer({
-    "bias": bias,
-    "num_neurons": 5,
+    "num_neurons": 30,
     "rectifier": rectifiers.step,
 })
 
 net.addLayer({
-    "bias": bias,
-    "num_neurons": 5,
-    "rectifier": rectifiers.relu,
+    "num_neurons": 1,
+    "rectifier": rectifiers.tanh,
 })
 
-net.addLayer({
-    "bias": bias,
-    "num_neurons": 3,
-    "rectifier": rectifiers.step,
-})
+// let file_data = fs.readFileSync("./data/training.json")
+// let data = JSON.parse(file_data)
+// let keys = Object.keys(data)
 
-let file_data = fs.readFileSync("./data/training.json")
-let data = JSON.parse(file_data)
-let keys = Object.keys(data)
-
-for (var i = 0; i < 10000; i++) {
+for (var i = 0; i < 5000; i++) {
     let input = []
-    let target = []
+    let target = [0]
 
-    for (var j = 0; j < 3; j++) {
+    for (var j = 0; j < 2; j++) {
         let num = Math.random() >= 0.5 ? 1 : 0
         input.push(num)
-        target.push(num === 0 ? 1 : 0)
+    }
+
+    if (input[0] + input[1] === 1) {
+        target = [1]
     }
 
     net.learn(input, target)
-    .catch((err) => {
-        console.log(err)
-    })
 }
 
 
