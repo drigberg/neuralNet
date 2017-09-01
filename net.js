@@ -2,19 +2,11 @@
 
 const Net = require("./models/Net")
 const rectifiers = require("./lib/rectifiers")
-const fs = require("fs")
 
 let net = new Net({
     "input_length": 2,
     "learning_rate": 0.05
 })
-
-// net.addLayer({
-//     "num_neurons": 10,
-//     "rectifier": rectifiers.sigmoid,
-//     "randomly_disconnected": true
-// })
-
 
 net.addLayer({
     "num_neurons": 3,
@@ -25,10 +17,6 @@ net.addLayer({
     "num_neurons": 1,
     "rectifier": rectifiers.step,
 })
-
-// let file_data = fs.readFileSync("./data/training.json")
-// let data = JSON.parse(file_data)
-// let keys = Object.keys(data)
 
 for (var i = 0; i < 50000; i++) {
     let input = []
