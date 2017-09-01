@@ -1,6 +1,7 @@
 const Layer = require("./Layer")
 let predictions = 0
 let successes = 0
+let power = 1
 
 class Net {
     constructor({ input_length, learning_rate }) {
@@ -58,8 +59,10 @@ class Net {
         predictions += 1
         successes += correct ? 1 : 0
 
-        if (predictions % 50 == 0) {
-            console.log(`${successes / predictions * 100}% accuracy`)
+
+        if (predictions % Math.pow(10, power) == 0) {
+            power += 1
+            console.log(`Iteration #${predictions}: ${successes / predictions * 100}% accuracy`)
         }
         this.backPropagate(target)
     }

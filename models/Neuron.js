@@ -87,7 +87,7 @@ class Neuron {
         let keys = Object.keys(this.connections.in)
         for (var j = 0; j < keys.length; j++) {
             let connection = this.connections.in[keys[j]]
-            let gradient = this.error * connection.in_neuron.activation * connection.weight
+            let gradient = this.error * connection.in_neuron.activation
             connection.weight += this.layer.net.learning_rate * gradient
         }
 

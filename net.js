@@ -6,7 +6,7 @@ const fs = require("fs")
 
 let net = new Net({
     "input_length": 2,
-    "learning_rate": 0.01
+    "learning_rate": 0.05
 })
 
 // net.addLayer({
@@ -17,25 +17,20 @@ let net = new Net({
 
 
 net.addLayer({
-    "num_neurons": 40,
-    "rectifier": rectifiers.tanh,
-})
-
-net.addLayer({
-    "num_neurons": 30,
-    "rectifier": rectifiers.step,
+    "num_neurons": 3,
+    "rectifier": rectifiers.relu
 })
 
 net.addLayer({
     "num_neurons": 1,
-    "rectifier": rectifiers.tanh,
+    "rectifier": rectifiers.step,
 })
 
 // let file_data = fs.readFileSync("./data/training.json")
 // let data = JSON.parse(file_data)
 // let keys = Object.keys(data)
 
-for (var i = 0; i < 5000; i++) {
+for (var i = 0; i < 50000; i++) {
     let input = []
     let target = [0]
 
