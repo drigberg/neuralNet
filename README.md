@@ -7,7 +7,7 @@ A framework for creating neural networks
 
 Create a net:
 
-```
+```javascript
 let net = new Net({
     "input_length": 2,
     "learning_rate": 0.05
@@ -16,7 +16,7 @@ let net = new Net({
 
 Add layers:
 
-```
+```javascript
 net.addLayer({
     "num_neurons": 3,
     "rectifier": rectifiers.relu
@@ -30,12 +30,12 @@ net.addLayer({
 
 Plug in input and target arrays for training:
 
-```
+```javascript
 net.learn(input, target)
 ```
 
 Implement:
 
-```
+```javascript
 net.predict(input)
 ```
