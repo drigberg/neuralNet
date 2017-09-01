@@ -20,6 +20,10 @@ class Net {
 
     predict(input) {
         return new Promise((resolve) => {
+            if (! (input instanceof Array)) {
+                throw new Error("Input must be an array!")
+            }
+
             for (var i = 0; i < input.length; i++) {
                 this.input.neurons[i].activation = input[i]
             }
@@ -36,22 +40,24 @@ class Net {
         return new Promise((resolve) => {
             this.finalLayer().propagate(target)
 
-            for (var i = input.length - 2; i >= 0; i--) {
+            for (var i = this.layers.length - 2; i >= 0; i--) {
                 this.layers[i].propagate()
             }
         })
     }
 
-    learn(input) {
+    learn(input, target) {
         return this.predict(input)
-        .then(() => {
-            return this.backPropagate()
+        .then((prediction) => {
+            return this.backPropagate(target)
         })
     }
 
     addLayer(layer_args) {
+        let in_layer = this.finalLayer() || this.input
+
         Object.assign(layer_args, {
-            "in_layer": this.finalLayer() || this.input,
+            "in_layer": in_layer,
             "net": this
         })
 

@@ -53,8 +53,8 @@ class Neuron {
         let keys = Object.keys(connections)
 
         for (var i = 0; i < keys.length; i++) {
-            let key = keys[i]
-            activation += connections[key].in_neuron.activation * connections[key].weight
+            let connection = connections[keys[i]]
+            activation += connection.in_neuron.activation * connection.weight
         }
 
         this.activation = this.layer.rectifier(activation, false)
@@ -72,8 +72,7 @@ class Neuron {
 
             keys.forEach((key) => {
                 let connection = connections[key]
-
-                error += connection.out.error * connection.weight
+                error += connection.out_neuron.error * connection.weight
             })
 
             this.error = this.derivative * error
@@ -85,7 +84,6 @@ class Neuron {
             let key = keys[j]
             let connection = this.connections.in[key]
             let gradient = this.error * connection.in_neuron.activation
-
             connection.weight += this.layer.net.learning_rate * gradient
         }
 
