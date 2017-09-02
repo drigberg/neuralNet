@@ -49,7 +49,6 @@ class Net {
         let prediction = this.predict(input)
         let correct = true
         for (var i = 0; i < target.length; i++) {
-            prediction[i] = prediction[i] > 0.5 ? 1 : 0
             if (target[i] !== prediction[i]) {
                 correct = false
                 break

@@ -33,5 +33,3 @@ for (var i = 0; i < 80000; i++) {
 
     net.learn(input, target)
 }
-
-

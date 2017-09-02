@@ -39,3 +39,20 @@ Implement:
 ```javascript
 net.predict(input)
 ```
+
+## To-Do List
+
+- Better name
+	- deep-node
+	- net-js
+    - dandrites-js
+- MSE
+- Conv net
+	- Multi-dimensional inputs
+	- Weight object used by connections
+		- allows for shared weights
+	- Pooling layers
+	- Export weights
+	- Import weights
+	- Visualisation
+	 	- Instance method, or static, using exported weights?
