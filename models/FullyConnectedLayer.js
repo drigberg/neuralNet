@@ -29,6 +29,7 @@ class FullyConnectedLayer extends Layer {
     }
 
     createArchitecture({ architecture, net, neuron_args }) {
+        net.architecture = architecture
         net.neurons = {}
         nest(architecture)
 
