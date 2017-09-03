@@ -1,17 +1,19 @@
-const Layer = require("./Layer")
+const FullyConnectedLayer = require("./FullyConnectedLayer")
+const ConvolutionalLayer = require("./ConvolutionalLayer")
+
 let predictions = 0
 let successes = 0
 let power = 1
 
 class Net {
-    constructor({ input_length, learning_rate }) {
+    constructor({ architecture, learning_rate }) {
         let input_args = {
             "is_input": true,
-            "num_neurons": input_length,
+            "architecture": architecture,
             "net": this
         }
 
-        let input_layer = new Layer(input_args)
+        let input_layer = new FullyConnectedLayer(input_args)
         this.input = input_layer
         this.layers = []
         this.learning_rate = learning_rate
@@ -49,7 +51,6 @@ class Net {
         let prediction = this.predict(input)
         let correct = true
         for (var i = 0; i < target.length; i++) {
-            prediction[i] = prediction[i] > 0.5 ? 1 : 0
             if (target[i] !== prediction[i]) {
                 correct = false
                 break
@@ -59,15 +60,27 @@ class Net {
         predictions += 1
         successes += correct ? 1 : 0
 
-
         if (predictions % Math.pow(5, power) == 0) {
             power += 1
             console.log(`Iteration #${predictions}: ${successes / predictions * 100}% accuracy`)
         }
+
         this.backPropagate(target)
     }
 
-    addLayer(layer_args) {
+    addFullyConnectedLayer(layer_args) {
+        layer_args = this.supplementLayerArgs(layer_args)
+
+        this.layers.push(new FullyConnectedLayer(layer_args))
+    }
+
+    addConvolutionalLayer(layer_args) {
+        layer_args = this.supplementLayerArgs(layer_args)
+
+        this.layers.push(new ConvolutionalLayer(layer_args))
+    }
+
+    supplementLayerArgs(layer_args) {
         let in_layer = this.finalLayer() || this.input
 
         Object.assign(layer_args, {
@@ -75,8 +88,7 @@ class Net {
             "net": this
         })
 
-        let new_layer = new Layer(layer_args)
-        layer_args.net.layers.push(new_layer)
+        return layer_args
     }
 }
 
