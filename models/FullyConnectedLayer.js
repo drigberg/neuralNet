@@ -20,17 +20,19 @@ class FullyConnectedLayer extends Layer {
         if (!is_input) {
             Object.assign(neuron_args, { in_neurons : in_layer.neurons })
         }
-
+        if (!architecture || !(architecture instanceof Array) || !architecture.length) {
+            throw new Error("Architecture must be array with at least one dimension")
+        }
         this.createArchitecture({
-            "net": this,
+            "layer": this,
             "architecture": architecture,
             "neuron_args": neuron_args
         })
     }
 
-    createArchitecture({ architecture, net, neuron_args }) {
-        net.architecture = architecture
-        net.neurons = {}
+    createArchitecture({ architecture, layer, neuron_args }) {
+        layer.architecture = architecture
+        layer.neurons = {}
         nest(architecture)
 
         function nest(arch, index, state) {
@@ -41,7 +43,7 @@ class FullyConnectedLayer extends Layer {
                     let nested = nest(arch, index + 1, nested_state)
                 }
             } else {
-                net.neurons[state] = new Neuron(neuron_args)
+                layer.neurons[state] = new Neuron(neuron_args)
                 return
             }
         }

@@ -19,7 +19,7 @@ class Net {
         this.learning_rate = learning_rate
     }
 
-    finalLayer() {
+    get finalLayer() {
         return this.layers.length ? this.layers[this.layers.length - 1] : null
     }
 
@@ -36,11 +36,11 @@ class Net {
             this.layers[i].activate()
         }
 
-        return this.finalLayer().activate()
+        return this.finalLayer.activate()
     }
 
     backPropagate(target) {
-        this.finalLayer().propagate(target)
+        this.finalLayer.propagate(target)
 
         for (var i = this.layers.length - 2; i >= 0; i--) {
             this.layers[i].propagate()
@@ -81,7 +81,7 @@ class Net {
     }
 
     supplementLayerArgs(layer_args) {
-        let in_layer = this.finalLayer() || this.input
+        let in_layer = this.finalLayer || this.input
 
         Object.assign(layer_args, {
             "in_layer": in_layer,
