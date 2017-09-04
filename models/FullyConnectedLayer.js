@@ -23,14 +23,14 @@ class FullyConnectedLayer extends Layer {
         if (!architecture || !(architecture instanceof Array) || !architecture.length) {
             throw new Error("Architecture must be array with at least one dimension")
         }
-        this.createArchitecture({
+        this.createFromArchitecture({
             "layer": this,
             "architecture": architecture,
             "neuron_args": neuron_args
         })
     }
 
-    createArchitecture({ architecture, layer, neuron_args }) {
+    createFromArchitecture({ architecture, layer, neuron_args }) {
         layer.architecture = architecture
         layer.neurons = {}
         nest(architecture)
