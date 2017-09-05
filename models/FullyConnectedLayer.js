@@ -20,9 +20,11 @@ class FullyConnectedLayer extends Layer {
         if (!is_input) {
             Object.assign(neuron_args, { in_neurons : in_layer.neurons })
         }
+
         if (!architecture || !(architecture instanceof Array) || !architecture.length) {
             throw new Error("Architecture must be array with at least one dimension")
         }
+
         this.createFromArchitecture({
             "layer": this,
             "architecture": architecture,
