@@ -28,6 +28,7 @@ class Net {
             throw new Error("Input must be an array!")
         }
 
+        // has to navigate input architecture
         for (var i = 0; i < input.length; i++) {
             this.input.neurons[i].activation = input[i]
         }
