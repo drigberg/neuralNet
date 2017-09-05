@@ -3,6 +3,7 @@ const Neuron = require("./Neuron")
 const Filter = require("./Filter")
 const ConnectionParams = require("./ConnectionParams")
 const Connection = require("./Connection")
+const errors = require("../lib/errors")
 
 /**
  *
@@ -57,9 +58,13 @@ class ConvolutionalLayer extends Layer {
         for (var j = 0; j < input_structure.length; j++) {
             let num_neurons = (input_structure[j] - (filter_structure[j] - stride)) / stride
 
-            if (!Number.isInteger(num_neurons)) {
-                let explanation = `(${input_structure[i]} - (${filter_structure[i]} - ${stride})) / ${stride} = ${num_neurons}`
-                throw new Error(`Incompatible combination of input structure, filter structure, and stride: ${explanation}`)
+            if (!num_neurons || !Number.isInteger(num_neurons)) {
+                throw errors.INCOMPATIBLE_FILTER({
+                    "input_length": input_structure[j],
+                    "filter_length": filter_structure[j],
+                    "stride": stride,
+                    "res": num_neurons
+                })
             }
             this.architecture.push(num_neurons)
         }
@@ -106,7 +111,12 @@ class ConvolutionalLayer extends Layer {
                     let nested = nest(arch, index + 1, nested_state)
                 }
             } else {
-                neuron.connections.out[state] = new Connection(neuron.layer.filters[filter_no][state])
+                let in_neuron = null // Figure this outtttt
+                neuron.connections.out[state] = new Connection({
+                    "in_neuron": in_neuron,
+                    "out_neuron": neuron,
+                    "shared_params": neuron.layer.filters[filter_no][state]
+                })
             }
         }
     }
