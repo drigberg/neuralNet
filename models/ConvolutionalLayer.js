@@ -47,6 +47,7 @@ class ConvolutionalLayer extends Layer {
         this.createFromArchitecture({
             "depth": depth,
             "layer": this,
+            "in_layer": in_layer,
             "filter_structure": filter_structure,
             "architecture": this.architecture,
             "neuron_args": neuron_args,
@@ -58,7 +59,7 @@ class ConvolutionalLayer extends Layer {
         for (var j = 0; j < input_structure.length; j++) {
             let num_neurons = (input_structure[j] - (filter_structure[j] - stride)) / stride
 
-            if (!num_neurons || !Number.isInteger(num_neurons)) {
+            if (!num_neurons || !Number.isInteger(num_neurons) || num_neurons < 1) {
                 throw errors.INCOMPATIBLE_FILTER({
                     "input_length": input_structure[j],
                     "filter_length": filter_structure[j],
@@ -70,7 +71,7 @@ class ConvolutionalLayer extends Layer {
         }
     }
 
-    createFromArchitecture({ architecture, filter_structure, layer, neuron_args, depth, stride }) {
+    createFromArchitecture({ architecture, filter_structure, layer, neuron_args, depth, stride, in_layer }) {
         for (var filter_no = 0; filter_no < depth; filter_no++) {
             // prefix all neuron states with filter number (ex: "3x0.3.1")
             nest(architecture, null, null, filter_no)
@@ -92,7 +93,10 @@ class ConvolutionalLayer extends Layer {
                 layer.createConnections({
                     "neuron": layer.neurons[state],
                     "filter_structure": filter_structure,
-                    "filter_no": filter_no
+                    "filter_no": filter_no,
+                    "in_layer": in_layer,
+                    "neuron_state": state.split("x")[1],
+                    "stride": stride,
                 })
 
                 return
@@ -100,7 +104,9 @@ class ConvolutionalLayer extends Layer {
         }
     }
 
-    createConnections({ neuron, filter_structure, filter_no }) {
+    createConnections({ neuron, filter_structure, filter_no, neuron_state, stride, in_layer }) {
+        let in_filters = in_layer.filters ? in_layer.filters.length : 0
+
         nest(filter_structure)
 
         function nest(arch, index, state) {
@@ -111,13 +117,39 @@ class ConvolutionalLayer extends Layer {
                     let nested = nest(arch, index + 1, nested_state)
                 }
             } else {
-                let in_neuron = null // Figure this outtttt
-                neuron.connections.out[state] = new Connection({
-                    "in_neuron": in_neuron,
-                    "out_neuron": neuron,
-                    "shared_params": neuron.layer.filters[filter_no][state]
-                })
+                let neuron_coords = neuron_state.split(".")
+                let connection_coords = state.split(".")
+
+                let in_neuron_coords = []
+                for (var j = 0; j < neuron_coords.length; j++) {
+                    let coord = Number(neuron_coords[j]) * stride + Number(connection_coords[j])
+                    in_neuron_coords.push(coord)
+                }
+
+                if (in_filters) {
+                    for (var k = 0; k < in_filters.length; k++) {
+                        let in_filter_no = k
+                        createConnection({ state, in_neuron_coords, in_layer, neuron, in_filter_no })
+                    }
+                } else {
+                    createConnection({ state, in_neuron_coords, in_layer, neuron })
+                }
             }
+        }
+
+
+        function createConnection({ state, in_neuron_coords, in_layer, neuron, in_filter_no }) {
+            let in_neuron_key = in_neuron_coords.join(".")
+
+            in_neuron_key = in_filter_no ? [in_filter_no, "x", in_neuron_key].join("") : in_neuron_key
+
+            let in_neuron = in_layer.neurons[in_neuron_key]
+
+            neuron.connections.out[state] = new Connection({
+                "in_neuron": in_neuron,
+                "out_neuron": neuron,
+                "shared_params": neuron.layer.filters[filter_no][state]
+            })
         }
     }
 
