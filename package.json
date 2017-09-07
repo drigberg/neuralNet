@@ -6,7 +6,9 @@
   "license": "",
   "private": false,
   "dependencies": {
-    "lodash": "4.17.4"
+    "lodash": "4.17.4",
+    "node-png": "0.4.3",
+    "pngjs": "3.3.0"
   },
   "scripts": {
     "test": "mocha --timeout=30000 specs/*.spec.js"

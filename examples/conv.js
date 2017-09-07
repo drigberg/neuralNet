@@ -1,10 +1,14 @@
 const Net = require("../models/Net")
 const rectifiers = require("../lib/rectifiers")
 
-net = new Net({
-    "architecture": [30, 30, 3],
+const net = new Net({
+    "architecture": [32, 32, 3],
     "learning_rate": 0.02
 })
+
+// const jedi_images = net.loadImageDirectory({"directory": "./data/training/jedi"})
+// const sith_images = net.loadImageDirectory({"directory": "./data/training/sith"})
+
 
 net.addConvolutionalLayer({
     "filter_structure": [6, 6, 3],
@@ -18,29 +22,25 @@ net.addFullyConnectedLayer({
     "rectifier": rectifiers.relu,
 })
 
-
-for (var x = 0; x < 10; x++) {
-    let input = []
-    let values = []
-    let sum = 0
-
-    for (var i = 0; i < 30; i++) {
-        input.push([])
-        for (var j = 0; j < 30; j++) {
-            input[i].push([])
-            for (var k = 0; k < 3; k++) {
-                let value = Math.random() * 30
-                input[i][j].push(Math.floor(value))
-                values.push(value)
-                sum += value
-            }
-        }
+net.loadImageDirectory({"directory": "./data/photos"})
+.then((darth_images) => {
+    for (var i = 0; i < 100; i++) {
+        net.learn(darth_images[0], [0, 0, 1])
     }
+})
 
-    console.log(input)
 
-    let average = sum / values.length
-    let target = [average > 15, average < 14, average > 16]
+// let targets = {
+//     "jedi": [1, 0],
+//     "sith": [0, 1]
+// }
 
-    net.learn(input, target)
-}
+// for (var i = 0; i < Math.max(jedi_images.length, sith_images.length); i++) {
+//     if (i < jedi_images.length) {
+//         net.learn(jedi_images[i], targets.jedi)
+//     }
+
+//     if (i < sith_images.length) {
+//         net.learn(sith_images[i], targets.sith)
+//     }
+// }
