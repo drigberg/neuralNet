@@ -8,34 +8,46 @@ A framework for creating neural networks
 Create a net:
 
 ```javascript
-let net = new Net({
-    "input_length": 2,
-    "learning_rate": 0.05
+const net = new Net({
+    "architecture": [32, 32, 3],
+    "learning_rate": 0.02
 })
 ```
 
 Add layers:
 
 ```javascript
+net.addConvolutionalLayer({
+    "filter_structure": [6, 6, 3],
+    "depth": 6,
+    "stride": 1,
+    "rectifier": rectifiers.relu,
+})
+
 net.addLayer({
     "num_neurons": 3,
     "rectifier": rectifiers.relu
 })
-
-net.addLayer({
-    "num_neurons": 1,
-    "rectifier": rectifiers.step,
-})
 ```
 
-Plug in input and target arrays for training:
+Load images and train:
 
 ```javascript
-net.learn(input, target)
+net.loadImageDirectory({"directory": "./data/training"})
+.then(([jedi, sith]) => {
+    for (var i = 0; i < 100; i++) {
+        net.learn(jedi[i], [0, 1])
+        net.learn(sith[i], [1, 0])
+    }
+})
 ```
 
 Implement:
 
 ```javascript
-net.predict(input)
+net.loadImage("./data/me.png")
+.then((image_of_me) => {
+    let jedi_or_sith = net.predict(image_of_me)
+    console.log(jedi_or_sith)
+})
 ```
