@@ -203,4 +203,66 @@ describe("Fully Connected Layers", () => {
             })
         })
     })
+
+    describe("backpropagation:", () => {
+        let net
+
+        beforeEach(() => {
+            net = new Net({
+                "architecture": [2],
+                "learning_rate": 0.02
+            })
+
+            net.addFullyConnectedLayer({
+                "architecture": [3],
+                "rectifier": rectifiers.step,
+            })
+
+            net.addFullyConnectedLayer({
+                "architecture": [2],
+                "rectifier": rectifiers.step,
+            })
+        })
+
+        it("all activations are numbers", () => {
+            for (var j = 0; j < 100; j++) {
+                net.learn([Math.random(), Math.random()], [0, 1])
+            }
+
+            let conv_neurons = net.layers[0].neurons
+            let neuron_keys = Object.keys(conv_neurons)
+            let all_numbers = true
+
+            for (var i = 0; i < neuron_keys.length; i++) {
+                let activation = conv_neurons[neuron_keys[i]].activation
+                if (typeof activation !== "number") {
+                    all_numbers = false
+                    break
+                }
+            }
+
+            expect(all_numbers).to.be.true
+        })
+
+        it("all activations are not zero", () => {
+            for (var j = 0; j < 100; j++) {
+                net.learn([Math.random(), Math.random()], [0, 1])
+            }
+
+            let conv_neurons = net.layers[0].neurons
+            let neuron_keys = Object.keys(conv_neurons)
+            let all_zeroes = true
+
+            for (var i = 0; i < neuron_keys.length; i++) {
+                let activation = conv_neurons[neuron_keys[i]].activation
+
+                if (activation !== 0) {
+                    all_zeroes = false
+                    break
+                }
+            }
+
+            expect(all_zeroes).to.be.false
+        })
+    })
 })
