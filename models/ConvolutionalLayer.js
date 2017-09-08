@@ -145,11 +145,15 @@ class ConvolutionalLayer extends Layer {
 
             let in_neuron = in_layer.neurons[in_neuron_key]
 
-            neuron.connections.out[state] = new Connection({
+            let connection = new Connection({
                 "in_neuron": in_neuron,
                 "out_neuron": neuron,
                 "shared_params": neuron.layer.filters[filter_no][state]
             })
+
+            // update on both ends of the connection
+            neuron.connections.in[neuron._id] = connection
+            in_neuron.connections.out[in_neuron._id] = connection
         }
     }
 

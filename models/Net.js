@@ -45,7 +45,6 @@ class Net {
     }
 
     predict(input) {
-        console.log("Predicting!")
         if (! (input instanceof Array)) {
             throw new Error("Input must be an array!")
         }
@@ -64,7 +63,6 @@ class Net {
     }
 
     backPropagate(target) {
-        console.log("Back-propagating!")
         this.finalLayer.propagate(target)
 
         for (var i = this.layers.length - 2; i >= 0; i--) {
@@ -84,11 +82,11 @@ class Net {
 
         predictions += 1
         successes += correct ? 1 : 0
-        console.log("Prediction:", prediction, "- Target:", target)
 
-        if (predictions % Math.pow(5, power) == 0) {
+        if (predictions % Math.pow(5, power) == 0 || predictions % Math.pow(4, power) == 0) {
             power += 1
-            console.log(`Iteration #${predictions}: ${successes / predictions * 100}% accuracy`)
+            console.log(`Prediction #${predictions}:`, prediction, "- Target:", target)
+            console.log(`Cumulative ${successes / predictions * 100}% accuracy`)
         }
 
         this.backPropagate(target)
@@ -145,12 +143,11 @@ class Net {
 
     loadImage(file_path) {
         return new Promise((resolve, reject) => {
-            console.log(file_path)
             let arr = []
             fs.createReadStream(file_path)
             .pipe(new PNG({ filterType: 4 }))
             .on('parsed', function() {
-                console.log("Parsed!")
+                console.log(`Parsed ${file_path}!`)
                 for (var x = 0; x < this.width; x++) {
                     arr.push([])
                     for (var y = 0; y < this.height; y++) {
