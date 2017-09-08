@@ -2,45 +2,88 @@ const Net = require("../models/Net")
 const rectifiers = require("../lib/rectifiers")
 
 const net = new Net({
-    "architecture": [32, 32, 3],
-    "learning_rate": 0.02
+    "architecture": [9, 9, 3],
+    "learning_rate": 0.0002
 })
 
-// const jedi_images = net.loadImageDirectory({"directory": "./data/training/jedi"})
-// const sith_images = net.loadImageDirectory({"directory": "./data/training/sith"})
-
-
 net.addConvolutionalLayer({
-    "filter_structure": [6, 6, 3],
+    "filter_structure": [3, 3, 1],
     "depth": 6,
     "stride": 1,
     "rectifier": rectifiers.relu,
 })
 
 net.addFullyConnectedLayer({
-    "architecture": [3],
-    "rectifier": rectifiers.relu,
+    "architecture": [2],
+    "rectifier": rectifiers.step,
 })
 
-net.loadImageDirectory({"directory": "./data/photos"})
-.then((darth_images) => {
-    for (var i = 0; i < 100; i++) {
-        net.learn(darth_images[0], [0, 0, 1])
-    }
+let targets = {
+    "jedi": [1, 0],
+    "sith": [0, 1]
+}
+
+let tests = []
+
+let train_promises = [
+    net.loadImageDirectory({"directory": "./data/training_9/jedi"}),
+    net.loadImageDirectory({"directory": "./data/training_9/sith"})
+]
+
+let test_promises = [
+    net.loadImageDirectory({"directory": "./data/testing_9/sith"}),
+    net.loadImageDirectory({"directory": "./data/testing_9/jedi"}),
+    net.loadImageDirectory({"directory": "./data/testing_9/gabri"}),
+    net.loadImageDirectory({"directory": "./data/testing_9/jj"}),
+    net.loadImageDirectory({"directory": "./data/testing_9/konstantin"})
+]
+
+let power = 1
+
+Promise.all(train_promises)
+.then(([jedi_images, sith_images]) => {
+    return Promise.all(test_promises)
+    .then(([sith, jedi, gabri, jj, konstantin]) => {
+        for (var i = 0; i < 500000; i++) {
+            if (Math.random() < 0.5) {
+                let jedi_index = Math.floor(Math.random() * jedi_images.length)
+                net.learn(jedi_images[jedi_index], targets.jedi)
+            } else {
+                let sith_index = Math.floor(Math.random() * sith_images.length)
+                net.learn(sith_images[sith_index], targets.sith)
+            }
+
+            if (i % 256 == 0) {
+                power += 1
+                test(sith, jedi, gabri, jj, konstantin)
+            }
+        }
+    })
 })
 
+function test(sith, jedi, gabri, jj, konstantin) {
+    sith.forEach((test_image) => {
+        let prediction = net.predict(test_image)
+        console.log("Test prediction for sith:", prediction)
+    })
 
-// let targets = {
-//     "jedi": [1, 0],
-//     "sith": [0, 1]
-// }
+    jedi.forEach((test_image) => {
+        let prediction = net.predict(test_image)
+        console.log("Test prediction for jedi:", prediction)
+    })
 
-// for (var i = 0; i < Math.max(jedi_images.length, sith_images.length); i++) {
-//     if (i < jedi_images.length) {
-//         net.learn(jedi_images[i], targets.jedi)
-//     }
+    jj.forEach((test_image) => {
+        let prediction = net.predict(test_image)
+        console.log("Test prediction for jj:", prediction)
+    })
 
-//     if (i < sith_images.length) {
-//         net.learn(sith_images[i], targets.sith)
-//     }
-// }
+    konstantin.forEach((test_image) => {
+        let prediction = net.predict(test_image)
+        console.log("Test prediction for konstantin:", prediction)
+    })
+
+    gabri.forEach((test_image) => {
+        let prediction = net.predict(test_image)
+        console.log("Test prediction for gabri:", prediction)
+    })
+}
