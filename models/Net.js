@@ -83,7 +83,7 @@ class Net {
         predictions += 1
         successes += correct ? 1 : 0
 
-        if (predictions % Math.pow(5, power) == 0 || predictions % Math.pow(4, power) == 0) {
+        if (predictions % 256 == 0) {
             power += 1
             console.log(`Prediction #${predictions}:`, prediction, "- Target:", target)
             console.log(`Cumulative ${successes / predictions * 100}% accuracy`)

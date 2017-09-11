@@ -3,12 +3,12 @@ const rectifiers = require("../lib/rectifiers")
 
 const net = new Net({
     "architecture": [9, 9, 3],
-    "learning_rate": 0.0002
+    "learning_rate": 0.000001
 })
 
 net.addConvolutionalLayer({
     "filter_structure": [3, 3, 1],
-    "depth": 6,
+    "depth": 2,
     "stride": 1,
     "rectifier": rectifiers.relu,
 })
