@@ -3,6 +3,11 @@
 
 A framework for creating neural networks
 
+Cool things:
+- Only requires lodash and pngjs (and chai, for testing)
+- Can create fully connected, convolutional, and pooling layers
+- Can accept input matrices with any number of dimensions
+
 ## Usage
 
 Create a net:
@@ -60,8 +65,6 @@ net.loadImage("./data/me.png")
 ## To-Do List
 
 - Better name
-	- deep-node
-	- net-js
     - dandrites-js
 - MSE
 - Pooling layers
