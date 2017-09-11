@@ -10,7 +10,7 @@ Create a net:
 ```javascript
 const net = new Net({
     "architecture": [32, 32, 3],
-    "learning_rate": 0.02
+    "learning_rate": 0.00001
 })
 ```
 
@@ -18,26 +18,31 @@ Add layers:
 
 ```javascript
 net.addConvolutionalLayer({
-    "filter_structure": [6, 6, 3],
-    "depth": 6,
+    "filter_structure": [3, 3, 1],
+    "depth": 2,
     "stride": 1,
     "rectifier": rectifiers.relu,
 })
 
-net.addLayer({
-    "num_neurons": 3,
-    "rectifier": rectifiers.relu
+net.addFullyConnectedLayer({
+    "architecture": [2],
+    "rectifier": rectifiers.step,
 })
 ```
 
 Load images and train:
 
 ```javascript
-net.loadImageDirectory({"directory": "./data/training"})
-.then(([jedi, sith]) => {
+let train_promises = [
+    net.loadImageDirectory({"directory": "./data/training_9/jedi"}),
+    net.loadImageDirectory({"directory": "./data/training_9/sith"})
+]
+
+Promise.all(train_promises)
+.then(([jedi_images, sith_images]) => {
     for (var i = 0; i < 100; i++) {
-        net.learn(jedi[i], [0, 1])
-        net.learn(sith[i], [1, 0])
+        net.learn(jedi_images[i], [0, 1])
+        net.learn(sith_images[i], [1, 0])
     }
 })
 ```

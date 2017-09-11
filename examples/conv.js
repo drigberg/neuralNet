@@ -23,8 +23,6 @@ let targets = {
     "sith": [0, 1]
 }
 
-let tests = []
-
 let train_promises = [
     net.loadImageDirectory({"directory": "./data/training_9/jedi"}),
     net.loadImageDirectory({"directory": "./data/training_9/sith"})
