@@ -61,5 +61,5 @@ typings/
 .env
 
 # assets
-.data/
+data/
 
