@@ -64,12 +64,7 @@ net.loadImage("./data/me.png")
 	- net-js
     - dandrites-js
 - MSE
-- Conv net
-	- Multi-dimensional inputs
-	- Weight object used by connections
-		- allows for shared weights
-	- Pooling layers
-	- Export weights
-	- Import weights
-	- Visualisation
-	 	- Instance method, or static, using exported weights?
+- Pooling layers
+- Export && import weights
+- Export prediction function
+- Visualisation
