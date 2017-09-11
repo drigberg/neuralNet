@@ -4,21 +4,32 @@ const Net = require("../models/Net")
 const rectifiers = require("../lib/rectifiers")
 
 const net = new Net({
-    "architecture": [2],
-    "learning_rate": 0.02
+    "input_length": 2,
+    "learning_rate": 0.08
 })
 
-net.addFullyConnectedLayer({
-    "architecture": [3],
-    "rectifier": rectifiers.relu,
+net.addLayer({
+    "num_neurons": 5,
+    "rectifier": rectifiers.relu
 })
 
-net.addFullyConnectedLayer({
-    "architecture": [1],
+net.addLayer({
+    "num_neurons": 1,
     "rectifier": rectifiers.step,
 })
 
-for (var i = 0; i < 80000; i++) {
+let randomMappings = []
+    [] : [],
+    [] : [],
+    [] : [],
+    [] : [],
+    [] : [],
+    [] : [],
+    [] : [],
+    [] : [],
+    [] : [],
+]
+for (var i = 0; i < 20000; i++) {
     let input = []
     let target = [0]
 
@@ -33,3 +44,5 @@ for (var i = 0; i < 80000; i++) {
 
     net.learn(input, target)
 }
+
+

@@ -1,15 +1,14 @@
-class Connection {
-    constructor(in_neuron, out_neuron, weight) {
-        let bias = Math.random() * 0.1 - 0.2
-        Object.assign(this, {
-            in_neuron,
-            out_neuron,
-            weight,
-            bias
-        })
+const ConnectionParams = require("./ConnectionParams")
 
-        this.multiplyBy = (multiplier) => {
-            this.weight *= multiplier
+class Connection {
+    constructor({ in_neuron, out_neuron, weight, shared_params }) {
+        this.in_neuron = in_neuron
+        this.out_neuron = out_neuron
+
+        if (weight) {
+            this.params = new ConnectionParams(weight)
+        } else if (shared_params) {
+            this.params = shared_params
         }
     }
 }

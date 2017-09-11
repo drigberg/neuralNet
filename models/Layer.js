@@ -1,42 +1,46 @@
 const Neuron = require("./Neuron")
+const _ = require("lodash")
 
+/**
+ * Layers contain neurons and expose functions for accessing them
+ *
+ * @class
+ * @param {Number} net - the net to which the layer belongs
+ * @param {Number} in_layer - layer forming incoming connections
+ * @param {Number} rectifier - activation function
+ */
 class Layer {
-    constructor({ num_neurons, in_layer, bias, rectifier, net, is_input, randomly_disconnected }) {
+    constructor({ net, in_layer, is_input, rectifier }) {
         this.net = net
-        this.randomly_disconnected = randomly_disconnected
-        this.neurons = []
+        this.in_layer = in_layer
 
-        let neuron_args = { "layer": this, "randomly_disconnected": this.randomly_disconnected }
-
-        if (!is_input) {
-            this.rectifier = rectifier
-            Object.assign(neuron_args, { bias, in_layer })
-        }
-
-        for (var i = 0; i < num_neurons; i++) {
-            this.neurons.push(new Neuron(neuron_args))
-        }
+        // rectifier is only used for non-input layers
+        this.rectifier = is_input ? null : rectifier
     }
 
     activate() {
-        for (var i = 0; i < this.neurons.length; i++) {
-            this.neurons[i].activate()
+        for (var i = 0; i < this.neuronsAsArray.length; i++) {
+            this.neuronsAsArray[i].activate()
         }
 
         return this.getActivations()
     }
 
     propagate(target_vector) {
-        for (var i = 0; i < this.neurons.length; i++) {
+        for (var i = 0; i < this.neuronsAsArray.length; i++) {
             let target = target_vector ? target_vector[i] : null
-            this.neurons[i].propagate(target)
+            this.neuronsAsArray[i].propagate(target)
         }
     }
 
     getActivations() {
-        return this.neurons.map((neuron) => {
+        return this.neuronsAsArray.map((neuron) => {
             return neuron.activation
         })
+    }
+
+    get neuronsAsArray() {
+        return _.values(this.neurons)
     }
 }
 
