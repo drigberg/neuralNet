@@ -7,10 +7,14 @@ const net = new Net({
 })
 
 net.addConvolutionalLayer({
-    "filter_structure": [3, 3, 1],
+    "filter_structure": [4, 4, 1],
     "depth": 2,
     "stride": 1,
     "rectifier": rectifiers.relu,
+})
+
+net.addPoolingLayer({
+    "spatial_extent": 2
 })
 
 net.addFullyConnectedLayer({

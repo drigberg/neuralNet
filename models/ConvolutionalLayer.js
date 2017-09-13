@@ -85,9 +85,6 @@ class ConvolutionalLayer extends Layer {
                     let nested = nest(arch, index + 1, nested_state, filter_no)
                 }
             } else {
-                let in_neurons = {}
-                let args = Object.assign(neuron_args, { in_neurons })
-
                 layer.neurons[state] = new Neuron(neuron_args)
 
                 layer.createConnections({
@@ -152,8 +149,8 @@ class ConvolutionalLayer extends Layer {
             })
 
             // update on both ends of the connection
-            neuron.connections.in[neuron._id] = connection
-            in_neuron.connections.out[in_neuron._id] = connection
+            neuron.connections.in[in_neuron._id] = connection
+            in_neuron.connections.out[neuron._id] = connection
         }
     }
 

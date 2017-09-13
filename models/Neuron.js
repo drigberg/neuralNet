@@ -7,9 +7,11 @@ class Neuron {
         return neurons ++
     }
 
-    constructor({ in_neurons, layer }) {
+    constructor({ in_neurons, layer, pooling }) {
         this._id = Neuron.uuid()
         this.layer = layer
+        this.pooling = pooling
+        this.bias = 0
 
         this.connections = {
             "out": {},
@@ -17,9 +19,9 @@ class Neuron {
         }
 
         // create connections to all neurons in input layer
+
         if (in_neurons) {
             let sum = 0
-            this.bias = 0
 
             let neuron_keys = Object.keys(in_neurons)
             neuron_keys.forEach((key) => {
@@ -53,17 +55,31 @@ class Neuron {
         let connections = this.connections.in
         let keys = Object.keys(connections)
 
-        for (var i = 0; i < keys.length; i++) {
-            let connection = connections[keys[i]]
-            activation += connection.in_neuron.activation * connection.params.weight
-        }
+        if (this.pooling) {
+            let max = { "derivative": null, "activation": -Infinity }
 
-        this.activation = this.layer.rectifier(activation, false)
-        this.derivative = this.layer.rectifier(activation, true)
+            for (var i = 0; i < keys.length; i++) {
+                if (connections[keys[i]].in_neuron.activation > max.activation) {
+                    max.activation = connections[keys[i]].in_neuron.activation
+                    max.derivative = connections[keys[i]].in_neuron.derivative
+                }
+            }
+
+            this.activation = max.activation
+            this.derivative = max.derivative
+        } else {
+            for (var i = 0; i < keys.length; i++) {
+                let connection = connections[keys[i]]
+                activation += connection.in_neuron.activation * connection.params.weight
+            }
+
+            this.activation = this.layer.rectifier(activation, false)
+            this.derivative = this.layer.rectifier(activation, true)
+        }
     }
 
     propagate(target) {
-        if (target !== null) {
+        if (target) {
             this.error = target - this.activation
         } else {
             let error = 0

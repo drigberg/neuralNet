@@ -1,5 +1,6 @@
 const FullyConnectedLayer = require("./FullyConnectedLayer")
 const ConvolutionalLayer = require("./ConvolutionalLayer")
+const PoolingLayer = require("./PoolingLayer")
 const fs = require("fs")
 const PNG = require('pngjs').PNG
 
@@ -96,6 +97,12 @@ class Net {
         layer_args = this.supplementLayerArgs(layer_args)
 
         this.layers.push(new FullyConnectedLayer(layer_args))
+    }
+
+    addPoolingLayer(layer_args) {
+        layer_args = this.supplementLayerArgs(layer_args)
+
+        this.layers.push(new PoolingLayer(layer_args))
     }
 
     addConvolutionalLayer(layer_args) {
