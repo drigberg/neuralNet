@@ -3,23 +3,19 @@ const rectifiers = require("../lib/rectifiers")
 
 const net = new Net({
     "architecture": [9, 9, 3],
-    "learning_rate": 0.000001
+    "learning_rate": 0.00000001
 })
 
 net.addConvolutionalLayer({
-    "filter_structure": [4, 4, 1],
-    "depth": 2,
+    "filter_structure": [3, 3, 1],
+    "depth": 3,
     "stride": 1,
     "rectifier": rectifiers.relu,
 })
 
-net.addPoolingLayer({
-    "spatial_extent": 2
-})
-
 net.addFullyConnectedLayer({
     "architecture": [2],
-    "rectifier": rectifiers.step,
+    "rectifier": rectifiers.relu,
 })
 
 let targets = {
