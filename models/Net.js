@@ -9,14 +9,13 @@ let power = 1
 
 class Net {
     constructor({ architecture, learning_rate }) {
-        let input_args = {
+        const input_args = {
             "is_input": true,
             "architecture": architecture,
             "net": this
         }
 
-        let input_layer = new FullyConnectedLayer(input_args)
-        this.input_layer = input_layer
+        this.input_layer = new FullyConnectedLayer(input_args)
         this.layers = []
         this.learning_rate = learning_rate
     }
@@ -26,7 +25,7 @@ class Net {
     }
 
     navigateInput(input) {
-        let input_layer = this.input_layer
+        const input_layer = this.input_layer
         nest(input_layer.architecture, input)
 
         function nest(arch, arr_or_value, index, state) {
@@ -116,29 +115,15 @@ class Net {
     }
 
     loadImageDirectory({ directory }) {
-        let promises = []
         let net = this
 
-        return Promise.resolve()
-        .then(() => {
-            // get models
-            return fs.readdirSync(directory)
-                .filter((file_name) => {
-                    return file_name[0] !== '.';
-                })
-                .forEach((file_name) => {
-                    promises.push(net.loadImage(`${directory}/${file_name}`))
-                });
-        })
-        .then(() => {
-            return Promise.all(promises)
-        })
-        .then((res) => {
-            return res
-        })
-        .catch((err) => {
-            console.log("err:", err)
-        })
+        return Promise.all(
+            fs.readdirSync(directory)
+                .filter((file_name) => file_name[0] !== '.')
+                .map((file_name) => net.loadImage(`${directory}/${file_name}`)))
+            .catch((err) => {
+                console.log("err:", err)
+            })
     }
 
     loadImage(file_path) {

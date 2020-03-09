@@ -220,7 +220,7 @@ describe("Convolutional Layers", () => {
         })
     })
 
-    describe.only("backpropagation:", () => {
+    describe("backpropagation:", () => {
         let net
 
         beforeEach(() => {

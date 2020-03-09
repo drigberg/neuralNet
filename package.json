@@ -6,13 +6,14 @@
   "license": "",
   "private": false,
   "dependencies": {
-    "lodash": "4.17.4",
+    "lodash": "^4.17.15",
     "pngjs": "3.3.0"
   },
   "scripts": {
     "test": "mocha --timeout=30000 specs/*.spec.js"
   },
   "devDependencies": {
-    "chai": "4.1.2"
+    "chai": "4.1.2",
+    "mocha": "^7.1.0"
   }
 }
