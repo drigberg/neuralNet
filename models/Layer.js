@@ -17,6 +17,7 @@ const errors = require('../lib/errors');
  * @class
  * @param {Number} net - the net to which the layer belongs
  * @param {Number} in_layer - layer forming incoming connections
+ * @param {Boolean} is_input - true if layer is input layer
  * @param {Number} rectifier - activation function
  */
 class Layer {
@@ -25,7 +26,11 @@ class Layer {
         this.in_layer = in_layer;
 
         // rectifier is only used for non-input layers
-        this.rectifier = is_input ? null : rectifier;
+        if (is_input) {
+            this.rectifier = null;
+        } else {
+            this.rectifier = rectifier;
+        }
     }
 
     activate() {
@@ -38,15 +43,16 @@ class Layer {
 
     propagate(target_vector) {
         for (var i = 0; i < this.neuronsAsArray.length; i++) {
-            const target = target_vector ? target_vector[i] : null;
+            let target = null;
+            if (target_vector) {
+                target = target_vector[i];
+            }
             this.neuronsAsArray[i].propagate(target);
         }
     }
 
     getActivations() {
-        return this.neuronsAsArray.map((neuron) => {
-            return neuron.activation;
-        });
+        return this.neuronsAsArray.map(neuron => neuron.activation);
     }
 
     get neuronsAsArray() {
@@ -71,37 +77,30 @@ class FullyConnectedLayer extends Layer {
         const neuron_args = { 'layer': this };
 
         if (!is_input) {
-            Object.assign(neuron_args, { in_neurons : in_layer.neurons });
+            neuron_args.in_neurons = in_layer.neurons;
         }
 
         if (!architecture || !(architecture instanceof Array) || !architecture.length) {
             throw new Error('Architecture must be array with at least one dimension');
         }
 
-        this.createFromArchitecture({
-            'layer': this,
-            'architecture': architecture,
-            'neuron_args': neuron_args
-        });
-    }
+        const that = this;
 
-    createFromArchitecture({ architecture, layer, neuron_args }) {
-        layer.architecture = architecture;
-        layer.neurons = {};
-        nest(architecture);
-
-        function nest(arch, index, state) {
+        function assignNeuronsRecursive(arch, index, state) {
             index = index || 0;
             if (index < arch.length) {
                 for (var i = 0; i < arch[index]; i++) {
                     const nested_state = state ? [state, i].join('.'): String(i);
-                    nest(arch, index + 1, nested_state);
+                    assignNeuronsRecursive(arch, index + 1, nested_state);
                 }
             } else {
-                layer.neurons[state] = new Neuron(neuron_args);
-                
+                that.neurons[state] = new Neuron(neuron_args);
             }
         }
+
+        this.architecture = architecture;
+        this.neurons = {};
+        assignNeuronsRecursive(architecture);
     }
 }
 
@@ -127,7 +126,7 @@ class ConvolutionalLayer extends Layer {
         const neuron_args = { 'layer': this };
 
         if (!is_input) {
-            Object.assign(neuron_args, { in_neurons : in_layer.neurons });
+            neuron_args.in_neurons = in_layer.neurons;
         }
 
         for (var i = 0; i < depth; i++) {
@@ -145,15 +144,40 @@ class ConvolutionalLayer extends Layer {
             'stride': stride
         });
 
-        this.createFromArchitecture({
-            'depth': depth,
-            'layer': this,
-            'in_layer': in_layer,
-            'filter_structure': filter_structure,
-            'architecture': this.architecture,
-            'neuron_args': neuron_args,
-            'stride': stride
-        });
+        const that = this;
+
+        function assignNeuronsRecursive(arch, index, state, filter_no) {
+            index = index || 0;
+            if (index < arch.length) {
+                for (var i = 0; i < arch[index]; i++) {
+                    let nested_state;
+                    if (typeof state === 'string' && state.includes('x')) {
+                        nested_state = [state, i].join('.');
+                    } else {
+                        nested_state = [filter_no, i].join('x');
+                    }
+                    assignNeuronsRecursive(arch, index + 1, nested_state, filter_no);
+                }
+            } else {
+                neuron_args.in_neurons = {};
+
+                that.neurons[state] = new Neuron(neuron_args);
+
+                that.createConnections({
+                    'neuron': that.neurons[state],
+                    'filter_structure': filter_structure,
+                    'filter_no': filter_no,
+                    'in_layer': in_layer,
+                    'neuron_state': state.split('x')[1],
+                    'stride': stride,
+                }); 
+            }
+        }
+
+        for (var filter_no = 0; filter_no < depth; filter_no++) {
+            // prefix all neuron states with filter number (ex: "3x0.3.1")
+            assignNeuronsRecursive(this.architecture, null, null, filter_no);
+        }
     }
 
     generateArchitecture({ input_structure, filter_structure, stride }) {
@@ -169,39 +193,6 @@ class ConvolutionalLayer extends Layer {
                 });
             }
             this.architecture.push(num_neurons);
-        }
-    }
-
-    createFromArchitecture({ architecture, filter_structure, layer, neuron_args, depth, stride, in_layer }) {
-        for (var filter_no = 0; filter_no < depth; filter_no++) {
-            // prefix all neuron states with filter number (ex: "3x0.3.1")
-            nest(architecture, null, null, filter_no);
-        }
-
-        function nest(arch, index, state, filter_no) {
-            index = index || 0;
-            if (index < arch.length) {
-                for (var i = 0; i < arch[index]; i++) {
-                    const nested_state = String(state).includes('x') ? [state, i].join('.'): [filter_no, i].join('x');
-                    nest(arch, index + 1, nested_state, filter_no);
-                }
-            } else {
-                const in_neurons = {};
-                Object.assign(neuron_args, { in_neurons });
-
-                layer.neurons[state] = new Neuron(neuron_args);
-
-                layer.createConnections({
-                    'neuron': layer.neurons[state],
-                    'filter_structure': filter_structure,
-                    'filter_no': filter_no,
-                    'in_layer': in_layer,
-                    'neuron_state': state.split('x')[1],
-                    'stride': stride,
-                });
-
-                
-            }
         }
     }
 
@@ -259,20 +250,8 @@ class ConvolutionalLayer extends Layer {
     }
 
     createFilterFromArchitecture({ architecture }) {
-        const obj = {};
         let sum = 0;
-
-        const layer = nest(architecture);
-
-        const states = Object.keys(layer);
-
-        const multiplier = 1 / sum;
-
-        for (var j = 0; j < states.length; j++) {
-            obj[states[j]].weight *= multiplier;
-        }
-
-        return obj;
+        const layer = {};
 
         function nest(arch, index, state) {
             index = index || 0;
@@ -284,11 +263,20 @@ class ConvolutionalLayer extends Layer {
             } else {
                 const weight = Math.random();
                 sum += weight;
-                obj[state] = new ConnectionParams(weight);
+                layer[state] = new ConnectionParams(weight);
                 return;
             }
-            return obj;
+            return layer;
         }
+
+        nest(architecture);
+
+        const multiplier = 1 / sum;
+        Object.keys(layer).forEach((state) => {
+            layer[state].weight *= multiplier;
+        });
+
+        return layer;
     }
 }
 

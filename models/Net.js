@@ -11,9 +11,6 @@ const {ConvolutionalLayer,FullyConnectedLayer} = require('./Layer');
  * Module
  */
 
-let predictions = 0;
-let successes = 0;
-let power = 1;
 
 class Net {
     constructor({ architecture, learning_rate }) {
@@ -22,6 +19,10 @@ class Net {
             'architecture': architecture,
             'net': this
         };
+
+        this.predictions = 0;
+        this.successes = 0;
+        this.logPower = 1;
 
         this.input_layer = new FullyConnectedLayer(input_args);
         this.layers = [];
@@ -87,13 +88,13 @@ class Net {
             }
         }
 
-        predictions += 1;
-        successes += correct ? 1 : 0;
+        this.predictions += 1;
+        this.successes += correct ? 1 : 0;
 
-        if (predictions % Math.pow(2, power) == 0) {
-            power += 1;
-            console.log(`Prediction #${predictions}:`, prediction, '- Target:', target);
-            console.log(`Cumulative ${successes / predictions * 100}% accuracy`);
+        if (this.predictions % Math.pow(2, this.logPower) == 0) {
+            this.logPower += 1;
+            console.log(`Prediction #${this.predictions}:`, prediction, '- Target:', target);
+            console.log(`Cumulative ${this.successes / this.predictions * 100}% accuracy`);
         }
 
         this.backPropagate(target);

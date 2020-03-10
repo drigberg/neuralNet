@@ -29,9 +29,7 @@ class Neuron {
             let sum = 0;
             this.bias = 0;
 
-            const neuron_keys = Object.keys(in_neurons);
-            neuron_keys.forEach((key) => {
-                const neuron = in_neurons[key];
+            Object.values(in_neurons).forEach((neuron) => {
                 const weight = Math.random();
                 sum += weight;
 
@@ -48,24 +46,19 @@ class Neuron {
 
             // ensure that all weights add to 1
             const multiplier = 1 / sum;
-            const keys = Object.keys(this.connections.in);
-            for (var j = 0; j < keys.length; j++) {
-                const key = keys[j];
-                this.connections.in[key].params.weight *= multiplier;
-            }
+            Object.values(this.connections.in).forEach((connection) => {
+                connection.params.weight *= multiplier;
+            });
         }
     }
 
     activate() {
         let activation = this.bias;
-        const connections = this.connections.in;
-        const keys = Object.keys(connections);
 
-        for (var i = 0; i < keys.length; i++) {
-            const connection = connections[keys[i]];
+        Object.values(this.connections.in).forEach((connection) => {
             activation += connection.in_neuron.activation * connection.params.weight;
-        }
-
+        });
+    
         this.activation = this.layer.rectifier(activation, false);
         this.derivative = this.layer.rectifier(activation, true);
     }
@@ -76,23 +69,17 @@ class Neuron {
         } else {
             let error = 0;
 
-            const connections = this.connections.out;
-            const keys = Object.keys(connections);
-
-            keys.forEach((key) => {
-                const connection = connections[key];
+            Object.values(this.connections.out).forEach((connection) => {
                 error += connection.out_neuron.error * connection.params.weight;
             });
             this.error = this.derivative * error;
         }
 
         // LEARN
-        const keys = Object.keys(this.connections.in);
-        for (var j = 0; j < keys.length; j++) {
-            const connection = this.connections.in[keys[j]];
+        Object.values(this.connections.in).forEach((connection) => {
             const gradient = this.error * connection.in_neuron.activation;
             connection.params.weight += this.layer.net.learning_rate * gradient;
-        }
+        });
 
         this.bias += this.layer.net.learning_rate * this.error;
     }
