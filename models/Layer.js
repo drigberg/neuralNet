@@ -1,6 +1,3 @@
-const Neuron = require("./Neuron")
-const _ = require("lodash")
-
 /**
  * Layers contain neurons and expose functions for accessing them
  *
@@ -11,37 +8,37 @@ const _ = require("lodash")
  */
 class Layer {
     constructor({ net, in_layer, is_input, rectifier }) {
-        this.net = net
-        this.in_layer = in_layer
+        this.net = net;
+        this.in_layer = in_layer;
 
         // rectifier is only used for non-input layers
-        this.rectifier = is_input ? null : rectifier
+        this.rectifier = is_input ? null : rectifier;
     }
 
     activate() {
         for (var i = 0; i < this.neuronsAsArray.length; i++) {
-            this.neuronsAsArray[i].activate()
+            this.neuronsAsArray[i].activate();
         }
 
-        return this.getActivations()
+        return this.getActivations();
     }
 
     propagate(target_vector) {
         for (var i = 0; i < this.neuronsAsArray.length; i++) {
-            let target = target_vector ? target_vector[i] : null
-            this.neuronsAsArray[i].propagate(target)
+            const target = target_vector ? target_vector[i] : null;
+            this.neuronsAsArray[i].propagate(target);
         }
     }
 
     getActivations() {
         return this.neuronsAsArray.map((neuron) => {
-            return neuron.activation
-        })
+            return neuron.activation;
+        });
     }
 
     get neuronsAsArray() {
-        return _.values(this.neurons)
+        return Object.values(this.neurons);
     }
 }
 
-module.exports = Layer
+module.exports = Layer;

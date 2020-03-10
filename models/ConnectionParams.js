@@ -6,8 +6,8 @@
  */
 class ConnectionParams {
     constructor(weight) {
-        this.weight = weight
+        this.weight = weight;
     }
 }
 
-module.exports = ConnectionParams
+module.exports = ConnectionParams;
