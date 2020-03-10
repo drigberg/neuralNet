@@ -102,4 +102,6 @@ class Neuron {
  * Module exports
  */
 
-module.exports = Neuron;
+module.exports = {
+    Neuron
+};

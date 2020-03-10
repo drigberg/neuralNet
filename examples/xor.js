@@ -4,7 +4,7 @@
  * Module dependencies
  */
 
-const Net = require('../models/Net');
+const {Net} = require('../models/Net');
 const rectifiers = require('../lib/rectifiers');
 
 /**

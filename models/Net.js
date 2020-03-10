@@ -5,8 +5,7 @@
 const fs = require('fs');
 const PNG = require('pngjs').PNG;
 
-const FullyConnectedLayer = require('./FullyConnectedLayer');
-const ConvolutionalLayer = require('./ConvolutionalLayer');
+const {ConvolutionalLayer,FullyConnectedLayer} = require('./Layer');
 
 /**
  * Module
@@ -164,4 +163,6 @@ class Net {
  * Module exports
  */
 
-module.exports = Net;
+module.exports = {
+    Net
+};
