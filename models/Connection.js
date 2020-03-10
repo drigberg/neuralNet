@@ -1,4 +1,12 @@
-const ConnectionParams = require('./ConnectionParams');
+/**
+ * Module
+ */
+
+class ConnectionParams {
+    constructor(weight) {
+        this.weight = weight;
+    }
+}
 
 class Connection {
     constructor({ in_neuron, out_neuron, weight, shared_params }) {
@@ -13,4 +21,11 @@ class Connection {
     }
 }
 
-module.exports = Connection;
+/**
+ * Module exports
+ */
+
+module.exports = {
+    Connection,
+    ConnectionParams
+};

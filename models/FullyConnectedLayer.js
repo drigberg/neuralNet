@@ -1,5 +1,13 @@
+/**
+ * Module dependencies
+ */
+
 const Layer = require('./Layer');
 const Neuron = require('./Neuron');
+
+/**
+ * Module
+ */
 
 /**
  * Fully connected layers are expressed with one dimension of neurons
@@ -51,5 +59,9 @@ class FullyConnectedLayer extends Layer {
         }
     }
 }
+
+/**
+ * Module exports
+ */
 
 module.exports = FullyConnectedLayer;

@@ -1,4 +1,8 @@
 /**
+ * Module
+ */
+
+/**
  * Layers contain neurons and expose functions for accessing them
  *
  * @class
@@ -40,5 +44,9 @@ class Layer {
         return Object.values(this.neurons);
     }
 }
+
+/**
+ * Module exports
+ */
 
 module.exports = Layer;

@@ -1,8 +1,15 @@
+/**
+ * Module dependencies
+ */
+
 const Layer = require('./Layer');
 const Neuron = require('./Neuron');
-const ConnectionParams = require('./ConnectionParams');
-const Connection = require('./Connection');
+const {Connection, ConnectionParams} = require('./Connection');
 const errors = require('../lib/errors');
+
+/**
+ * Module
+ */
 
 /**
  *
@@ -59,7 +66,7 @@ class ConvolutionalLayer extends Layer {
             const num_neurons = (input_structure[j] - (filter_structure[j] - stride)) / stride;
 
             if (!num_neurons || !Number.isInteger(num_neurons) || num_neurons < 1) {
-                throw errors.INCOMPATIBLE_FILTER({
+                throw errors.errors.INCOMPATIBLE_FILTER({
                     'input_length': input_structure[j],
                     'filter_length': filter_structure[j],
                     'stride': stride,
@@ -189,5 +196,9 @@ class ConvolutionalLayer extends Layer {
         }
     }
 }
+
+/**
+ * Module exports
+ */
 
 module.exports = ConvolutionalLayer;

@@ -1,6 +1,14 @@
-const Connection = require('./Connection');
+/**
+ * Module dependencies
+ */
+
+const {Connection} = require('./Connection');
 
 let neurons = 0;
+
+/**
+ * Module
+ */
 
 class Neuron {
     static uuid() {
@@ -89,5 +97,9 @@ class Neuron {
         this.bias += this.layer.net.learning_rate * this.error;
     }
 }
+
+/**
+ * Module exports
+ */
 
 module.exports = Neuron;

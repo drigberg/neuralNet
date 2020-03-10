@@ -1,7 +1,16 @@
-const FullyConnectedLayer = require('./FullyConnectedLayer');
-const ConvolutionalLayer = require('./ConvolutionalLayer');
+/**
+ * Module dependencies
+ */
+
 const fs = require('fs');
 const PNG = require('pngjs').PNG;
+
+const FullyConnectedLayer = require('./FullyConnectedLayer');
+const ConvolutionalLayer = require('./ConvolutionalLayer');
+
+/**
+ * Module
+ */
 
 let predictions = 0;
 let successes = 0;
@@ -150,5 +159,9 @@ class Net {
         });
     }
 }
+
+/**
+ * Module exports
+ */
 
 module.exports = Net;
