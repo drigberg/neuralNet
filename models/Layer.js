@@ -41,8 +41,8 @@ class Layer {
      * @return {Array<Number>}
      */
     activate() {
-        for (var i = 0; i < this.neuronsAsArray.length; i++) {
-            this.neuronsAsArray[i].activate();
+        for (const [, neuron] of this.neuronGenerator()) {
+            neuron.activate();
         }
 
         return this.activations;
@@ -53,11 +53,11 @@ class Layer {
      * @param {Array<Number>} target_vector 
      */
     propagate(target_vector) {
-        for (var i = 0; i < this.neuronsAsArray.length; i++) {
+        for (const [i, neuron] of this.neuronGenerator()) {
             if (target_vector) {
-                this.neuronsAsArray[i].propagate(target_vector[i]);
+                neuron.propagate(target_vector[i]);
             } else {
-                this.neuronsAsArray[i].propagate();
+                neuron.propagate();
             }
         }
     }
@@ -66,14 +66,18 @@ class Layer {
      * @return {Array<Number>}
      */
     get activations() {
-        return this.neuronsAsArray.map(neuron => neuron.activation);
+        return Object.values(this.neurons).map(neuron => neuron.activation);
     }
 
     /**
      * @return {Array<Neuron>}
      */
-    get neuronsAsArray() {
-        return Object.values(this.neurons);
+    *neuronGenerator() {
+        const neurons = Object.values(this.neurons);
+        for (let i = 0; i < neurons.length; i++) {
+            yield [i, neurons[i]];
+        }
+        return neurons.length;
     }
 }
 
