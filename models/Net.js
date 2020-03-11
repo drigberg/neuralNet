@@ -89,7 +89,9 @@ class Net {
         }
 
         this.predictions += 1;
-        this.successes += correct ? 1 : 0;
+        if (correct) {
+            this.successes += 1;
+        }
 
         if (this.predictions % Math.pow(2, this.logPower) == 0) {
             this.logPower += 1;
@@ -101,26 +103,26 @@ class Net {
     }
 
     addFullyConnectedLayer(layer_args) {
-        layer_args = this.supplementLayerArgs(layer_args);
-
-        this.layers.push(new FullyConnectedLayer(layer_args));
+        const supplemented_args = this.getSupplementedLayerArgs(layer_args);
+        this.layers.push(new FullyConnectedLayer({
+            ...layer_args,
+            ...supplemented_args
+        }));
     }
 
     addConvolutionalLayer(layer_args) {
-        layer_args = this.supplementLayerArgs(layer_args);
-
-        this.layers.push(new ConvolutionalLayer(layer_args));
+        const supplemented_args = this.getSupplementedLayerArgs(layer_args);
+        this.layers.push(new ConvolutionalLayer({
+            ...layer_args,
+            ...supplemented_args
+        }));
     }
 
-    supplementLayerArgs(layer_args) {
-        const in_layer = this.finalLayer || this.input_layer;
-
-        Object.assign(layer_args, {
-            'in_layer': in_layer,
-            'net': this
-        });
-
-        return layer_args;
+    getSupplementedLayerArgs() {
+        return {
+            net: this,
+            in_layer: this.finalLayer || this.input_layer
+        };
     }
 
     loadImageDirectory({ directory }) {

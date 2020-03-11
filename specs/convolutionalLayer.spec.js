@@ -224,7 +224,7 @@ describe('Convolutional Layers', () => {
         beforeEach(() => {
             net = new Net({
                 'architecture': [9, 9, 3],
-                'learning_rate': 0.0002
+                'learning_rate': 0.0000002
             });
 
             net.addConvolutionalLayer({
@@ -245,17 +245,13 @@ describe('Convolutional Layers', () => {
             .then((image) => {
                 net.learn(image, [0, 1]);
 
-                const conv_neurons = net.layers[0].neurons;
-                const neuron_keys = Object.keys(conv_neurons);
                 let all_numbers = true;
 
-                for (var i = 0; i < neuron_keys.length; i++) {
-                    const activation = conv_neurons[neuron_keys[i]].activation;
-                    if (typeof activation !== 'number') {
+                Object.values(net.layers[0].neurons).forEach((neuron) => {
+                    if (typeof neuron.activation !== 'number') {
                         all_numbers = false;
-                        break;
                     }
-                }
+                });
 
                 expect(all_numbers).to.be.true;
             });
@@ -268,18 +264,13 @@ describe('Convolutional Layers', () => {
                     net.learn(image, [Math.random(), Math.random()]);
                 }
 
-                const conv_neurons = net.layers[0].neurons;
-                const neuron_keys = Object.keys(conv_neurons);
                 let all_zeroes = true;
 
-                for (var i = 0; i < neuron_keys.length; i++) {
-                    const activation = conv_neurons[neuron_keys[i]].activation;
-
-                    if (activation !== 0) {
+                Object.values(net.layers[0].neurons).forEach((neuron) => {
+                    if (neuron.activation !== 0) {
                         all_zeroes = false;
-                        break;
                     }
-                }
+                });
 
                 expect(all_zeroes).to.be.false;
             });

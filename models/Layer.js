@@ -121,7 +121,6 @@ class ConvolutionalLayer extends Layer {
 
         this.neurons = {};
         this.filters = [];
-        this.architecture = [];
 
         const neuron_args = { 'layer': this };
 
@@ -138,7 +137,7 @@ class ConvolutionalLayer extends Layer {
             this.filters.push(filter);
         }
 
-        this.generateArchitecture({
+        this.architecture = this.generateArchitecture({
             'input_structure': in_layer.architecture,
             'filter_structure': filter_structure,
             'stride': stride
@@ -162,7 +161,6 @@ class ConvolutionalLayer extends Layer {
                 neuron_args.in_neurons = {};
 
                 that.neurons[state] = new Neuron(neuron_args);
-
                 that.createConnections({
                     'neuron': that.neurons[state],
                     'filter_structure': filter_structure,
@@ -181,6 +179,7 @@ class ConvolutionalLayer extends Layer {
     }
 
     generateArchitecture({ input_structure, filter_structure, stride }) {
+        const architecture = [];
         for (var j = 0; j < input_structure.length; j++) {
             const num_neurons = (input_structure[j] - (filter_structure[j] - stride)) / stride;
 
@@ -192,14 +191,34 @@ class ConvolutionalLayer extends Layer {
                     'res': num_neurons
                 });
             }
-            this.architecture.push(num_neurons);
+            architecture.push(num_neurons);
         }
+        return architecture;
+    }
+
+    createConnection({ state, in_neuron_coords, in_layer, neuron, in_filter_no, filter_no }) {
+        let in_neuron_key = in_neuron_coords.join('.');
+
+        if (typeof in_filter_no === 'number') {
+            in_neuron_key = [in_filter_no, 'x', in_neuron_key].join('');
+        }
+
+        const in_neuron = in_layer.neurons[in_neuron_key];
+
+        const connection = new Connection({
+            'in_neuron': in_neuron,
+            'out_neuron': neuron,
+            'shared_params': neuron.layer.filters[filter_no][state]
+        });
+
+        // update on both ends of the connection
+        neuron.connections.in[in_neuron._id] = connection;
+        in_neuron.connections.out[neuron._id] = connection;
     }
 
     createConnections({ neuron, filter_structure, filter_no, neuron_state, stride, in_layer }) {
-        const in_filters = in_layer.filters ? in_layer.filters.length : 0;
-
-        nest(filter_structure);
+        const num_in_filters = in_layer.filters ? in_layer.filters.length : 0;
+        const that = this;
 
         function nest(arch, index, state) {
             index = index || 0;
@@ -214,69 +233,49 @@ class ConvolutionalLayer extends Layer {
 
                 const in_neuron_coords = [];
                 for (var j = 0; j < neuron_coords.length; j++) {
-                    const coord = Number(neuron_coords[j]) * stride + Number(connection_coords[j]);
+                    const coord = parseInt(neuron_coords[j], 10) * stride + parseInt(connection_coords[j], 10);
                     in_neuron_coords.push(coord);
                 }
 
-                if (in_filters) {
-                    for (var k = 0; k < in_filters.length; k++) {
-                        const in_filter_no = k;
-                        createConnection({ state, in_neuron_coords, in_layer, neuron, in_filter_no });
+                if (num_in_filters > 0) {
+                    for (var k = 0; k < num_in_filters; k++) {
+                        that.createConnection({ state, in_neuron_coords, in_layer, neuron, filter_no, in_filter_no: k });
                     }
                 } else {
-                    createConnection({ state, in_neuron_coords, in_layer, neuron });
+                    that.createConnection({ state, in_neuron_coords, in_layer, neuron, filter_no, in_filter_no: null });
                 }
             }
         }
 
-
-        function createConnection({ state, in_neuron_coords, in_layer, neuron, in_filter_no }) {
-            let in_neuron_key = in_neuron_coords.join('.');
-
-            in_neuron_key = in_filter_no ? [in_filter_no, 'x', in_neuron_key].join('') : in_neuron_key;
-
-            const in_neuron = in_layer.neurons[in_neuron_key];
-
-            const connection = new Connection({
-                'in_neuron': in_neuron,
-                'out_neuron': neuron,
-                'shared_params': neuron.layer.filters[filter_no][state]
-            });
-
-            // update on both ends of the connection
-            neuron.connections.in[in_neuron._id] = connection;
-            in_neuron.connections.out[neuron._id] = connection;
-        }
+        nest(filter_structure);
     }
 
     createFilterFromArchitecture({ architecture }) {
         let sum = 0;
-        const layer = {};
+        const connectionParamsByState = {};
 
-        function nest(arch, index, state) {
+        function nest(index, state) {
             index = index || 0;
-            if (index < arch.length) {
-                for (var i = 0; i < arch[index]; i++) {
+            if (index < architecture.length) {
+                for (var i = 0; i < architecture[index]; i++) {
                     const nested_state = state ? [state, i].join('.'): String(i);
-                    nest(arch, index + 1, nested_state);
+                    nest(index + 1, nested_state);
                 }
             } else {
                 const weight = Math.random();
                 sum += weight;
-                layer[state] = new ConnectionParams(weight);
-                return;
+                connectionParamsByState[state] = new ConnectionParams(weight);
             }
-            return layer;
         }
 
-        nest(architecture);
+        nest();
 
         const multiplier = 1 / sum;
-        Object.keys(layer).forEach((state) => {
-            layer[state].weight *= multiplier;
+        Object.values(connectionParamsByState).forEach((connectionParams) => {
+            connectionParams.weight *= multiplier;
         });
 
-        return layer;
+        return connectionParamsByState;
     }
 }
 
