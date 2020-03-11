@@ -40,12 +40,12 @@ function task() {
     const test_promises = [
         net.loadImageDirectory({'directory': './data/testing_9/sith'}),
         net.loadImageDirectory({'directory': './data/testing_9/jedi'}),
-        net.loadImageDirectory({'directory': './data/testing_9/gabri'}),
-        net.loadImageDirectory({'directory': './data/testing_9/jj'}),
-        net.loadImageDirectory({'directory': './data/testing_9/konstantin'})
+        net.loadImageDirectory({'directory': './data/testing_9/sam'}),
+        net.loadImageDirectory({'directory': './data/testing_9/claude'}),
+        net.loadImageDirectory({'directory': './data/testing_9/tim'})
     ];
     
-    function test(sith, jedi, gabri, jj, konstantin) {
+    function test(sith, jedi, sam, claude, tim) {
         sith.forEach((test_image) => {
             const prediction = net.predict(test_image);
             console.log('Test prediction for sith:', prediction);
@@ -56,19 +56,19 @@ function task() {
             console.log('Test prediction for jedi:', prediction);
         });
     
-        jj.forEach((test_image) => {
+        claude.forEach((test_image) => {
             const prediction = net.predict(test_image);
-            console.log('Test prediction for jj:', prediction);
+            console.log('Test prediction for claude:', prediction);
         });
     
-        konstantin.forEach((test_image) => {
+        tim.forEach((test_image) => {
             const prediction = net.predict(test_image);
-            console.log('Test prediction for konstantin:', prediction);
+            console.log('Test prediction for tim:', prediction);
         });
     
-        gabri.forEach((test_image) => {
+        sam.forEach((test_image) => {
             const prediction = net.predict(test_image);
-            console.log('Test prediction for gabri:', prediction);
+            console.log('Test prediction for sam:', prediction);
         });
     }
     
@@ -77,7 +77,7 @@ function task() {
     Promise.all(train_promises)
     .then(([jedi_images, sith_images]) => {
         return Promise.all(test_promises)
-        .then(([sith, jedi, gabri, jj, konstantin]) => {
+        .then(([sith, jedi, sam, claude, tim]) => {
             for (var i = 0; i < 500000; i++) {
                 if (Math.random() < 0.5) {
                     const jedi_index = Math.floor(Math.random() * jedi_images.length);
@@ -89,7 +89,7 @@ function task() {
     
                 if (i % Math.pow(2, power) == 0) {
                     power += 1;
-                    test(sith, jedi, gabri, jj, konstantin);
+                    test(sith, jedi, sam, claude, tim);
                 }
             }
         });
