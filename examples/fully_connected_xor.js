@@ -11,6 +11,9 @@ const rectifiers = require('../lib/rectifiers');
  * Module
  */
 
+/**
+ * Example functionality
+ */
 function task() {
     const net = new Net({
         'architecture': [2],

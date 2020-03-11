@@ -10,11 +10,27 @@ let neurons = 0;
  * Module
  */
 
+/**
+ * Neuron
+ * @class
+ */
 class Neuron {
+    /**
+     * Generates unique id for neuron
+     * @static
+     * @return {Number}
+     */
     static uuid() {
         return neurons ++;
     }
 
+    /**
+     * 
+     * @param {Object} options 
+     * @param {Array<Neuron>} options.in_neurons
+     * @param {Layer} options.layer
+     * @param {Boolean} options.pooling
+     */
     constructor({ in_neurons, layer, pooling }) {
         this._id = Neuron.uuid();
         this.layer = layer;
@@ -54,22 +70,22 @@ class Neuron {
         }
     }
 
+    /**
+     * Determines new activation based on input connections
+     */
     activate() {
-        const connections = this.connections.in;
-        const keys = Object.keys(connections);
-
         if (this.pooling) {
             const max = {
                 derivative: null,
                 activation: -Infinity
             };
 
-            for (var i = 0; i < keys.length; i++) {
-                if (connections[keys[i]].in_neuron.activation > max.activation) {
-                    max.activation = connections[keys[i]].in_neuron.activation;
-                    max.derivative = connections[keys[i]].in_neuron.derivative;
+            Object.values(this.connections.in).forEach((connection) => {
+                if (connection.in_neuron.activation > max.activation) {
+                    max.activation = connection.in_neuron.activation;
+                    max.derivative = connection.in_neuron.derivative;
                 }
-            }
+            });
 
             this.activation = max.activation;
             this.derivative = max.derivative;
@@ -84,6 +100,10 @@ class Neuron {
         }
     }
 
+    /**
+     * Adjusts bias based on error
+     * @param {Array<Number>} target 
+     */
     propagate(target) {
         if (typeof target === 'number') {
             this.error = target - this.activation;

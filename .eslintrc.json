@@ -21,6 +21,9 @@
       "mocha": true,
       "jest": true
     },
+    "plugins": [
+        "jsdoc"
+    ],
     "rules": {
       "no-console": 0,
       "no-undef": 2,
@@ -51,6 +54,13 @@
       "prefer-const": 2,
       "prefer-spread": 2,
       "quotes": ["error", "single"],
+      "require-jsdoc": ["error", {
+        "require": {
+          "ClassDeclaration": true,
+          "FunctionDeclaration": true,
+          "MethodDefinition": true
+        }
+      }],
       "semi": 2
     }
 }

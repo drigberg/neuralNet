@@ -9,6 +9,9 @@ const rectifiers = require('../lib/rectifiers');
  * Module
  */
 
+/**
+ * Example functionality
+ */
 function task() {
     const net = new Net({
         'architecture': [9, 9, 3],
@@ -45,6 +48,14 @@ function task() {
         net.loadImageDirectory({'directory': './data/testing_9/tim'})
     ];
     
+    /**
+     * Tests and reports accuracy
+     * @param {*} sith 
+     * @param {*} jedi 
+     * @param {*} sam 
+     * @param {*} claude 
+     * @param {*} tim 
+     */
     function test(sith, jedi, sam, claude, tim) {
         sith.forEach((test_image) => {
             const prediction = net.predict(test_image);

@@ -12,7 +12,16 @@ const {ConvolutionalLayer,FullyConnectedLayer,PoolingLayer} = require('./Layer')
  */
 
 
+/**
+ * Net class contains layers of neurons
+ */
 class Net {
+    /**
+     * 
+     * @param {Object} options 
+     * @param {Array<Number>} options.architecture
+     * @param {Number} options.learning_rate
+     */
     constructor({ architecture, learning_rate }) {
         const input_args = {
             is_input: true,
@@ -29,14 +38,28 @@ class Net {
         this.learning_rate = learning_rate;
     }
 
+    /**
+     * @return {Layer|null}
+     */
     get finalLayer() {
         return this.layers.length ? this.layers[this.layers.length - 1] : null;
     }
 
+    /**
+     * 
+     * @param {*} input 
+     */
     navigateInput(input) {
         const input_layer = this.input_layer;
         nest(input_layer.architecture, input);
 
+        /**
+         * Recursive function to assign activations
+         * @param {} arch 
+         * @param {*} arr_or_value 
+         * @param {*} index 
+         * @param {*} state 
+         */
         function nest(arch, arr_or_value, index, state) {
             index = index || 0;
             if (index < arch.length) {
@@ -52,6 +75,10 @@ class Net {
         }
     }
 
+    /**
+     * Generates prediction based on input
+     * @param {Array<Number>} input 
+     */
     predict(input) {
         if (! (input instanceof Array)) {
             throw new Error('Input must be an array!');
@@ -62,6 +89,10 @@ class Net {
         return this.activate();
     }
 
+    /**
+     * Activates neurons
+     * @return {Array<Number>} returns final prediction
+     */
     activate() {
         for (var i = 0; i < this.layers.length; i++) {
             this.layers[i].activate();
@@ -70,6 +101,10 @@ class Net {
         return this.finalLayer.activate();
     }
 
+    /**
+     * Adjusts weights based on error from target
+     * @param {Array<Number>} target 
+     */
     backPropagate(target) {
         this.finalLayer.propagate(target);
 
@@ -78,6 +113,11 @@ class Net {
         }
     }
 
+    /**
+     * Generates prediction and adjusts weights based on error
+     * @param {Array<Number>} input 
+     * @param {Array<Number>} target 
+     */
     learn(input, target) {
         const prediction = this.predict(input);
         let correct = true;
@@ -102,6 +142,10 @@ class Net {
         this.backPropagate(target);
     }
 
+    /**
+     * Adds a fully connected layer
+     * @param {Object} layer_args 
+     */
     addFullyConnectedLayer(layer_args) {
         const supplemented_args = this.getSupplementedLayerArgs(layer_args);
         this.layers.push(new FullyConnectedLayer({
@@ -110,6 +154,10 @@ class Net {
         }));
     }
 
+    /**
+     * Adds a convolutional layer
+     * @param {Object} layer_args 
+     */
     addConvolutionalLayer(layer_args) {
         const supplemented_args = this.getSupplementedLayerArgs(layer_args);
         this.layers.push(new ConvolutionalLayer({
@@ -118,6 +166,10 @@ class Net {
         }));
     }
 
+    /**
+     * Adds a pooling layer
+     * @param {Object} layer_args 
+     */
     addPoolingLayer(layer_args) {
         const supplemented_args = this.getSupplementedLayerArgs(layer_args);
         this.layers.push(new PoolingLayer({
@@ -126,6 +178,10 @@ class Net {
         }));
     }
 
+    /**
+     * Returns arguments needed for layers
+     * @return {Object}
+     */
     getSupplementedLayerArgs() {
         return {
             net: this,
@@ -133,7 +189,11 @@ class Net {
         };
     }
 
-    loadImageDirectory({ directory }) {
+    /**
+     * Loads all images from a directory
+     * @param {String} directory 
+     */
+    loadImageDirectory(directory) {
         const net = this;
 
         return Promise.all(
@@ -145,6 +205,10 @@ class Net {
             });
     }
 
+    /**
+     * Loads an image
+     * @param {String} file_path 
+     */
     loadImage(file_path) {
         return new Promise((resolve) => {
             const arr = [];
