@@ -17,14 +17,14 @@ function task() {
     
     net.addConvolutionalLayer({
         'filter_structure': [3, 3, 1],
-        'depth': 2,
+        'depth': 3,
         'stride': 1,
         'rectifier': rectifiers.relu,
     });
     
     net.addFullyConnectedLayer({
         'architecture': [2],
-        'rectifier': rectifiers.step,
+        'rectifier': rectifiers.relu,
     });
     
     const targets = {

@@ -5,7 +5,7 @@
 const fs = require('fs');
 const PNG = require('pngjs').PNG;
 
-const {ConvolutionalLayer,FullyConnectedLayer} = require('./Layer');
+const {ConvolutionalLayer,FullyConnectedLayer,PoolingLayer} = require('./Layer');
 
 /**
  * Module
@@ -113,6 +113,14 @@ class Net {
     addConvolutionalLayer(layer_args) {
         const supplemented_args = this.getSupplementedLayerArgs(layer_args);
         this.layers.push(new ConvolutionalLayer({
+            ...layer_args,
+            ...supplemented_args
+        }));
+    }
+
+    addPoolingLayer(layer_args) {
+        const supplemented_args = this.getSupplementedLayerArgs(layer_args);
+        this.layers.push(new PoolingLayer({
             ...layer_args,
             ...supplemented_args
         }));

@@ -15,9 +15,11 @@ class Neuron {
         return neurons ++;
     }
 
-    constructor({ in_neurons, layer }) {
+    constructor({ in_neurons, layer, pooling }) {
         this._id = Neuron.uuid();
         this.layer = layer;
+        this.pooling = pooling;
+        this.bias = 0;
 
         this.connections = {
             'out': {},
@@ -53,14 +55,30 @@ class Neuron {
     }
 
     activate() {
-        let activation = this.bias;
+        const connections = this.connections.in;
+        const keys = Object.keys(connections);
 
-        Object.values(this.connections.in).forEach((connection) => {
-            activation += connection.in_neuron.activation * connection.params.weight;
-        });
-    
-        this.activation = this.layer.rectifier(activation, false);
-        this.derivative = this.layer.rectifier(activation, true);
+        if (this.pooling) {
+            const max = { 'derivative': null, 'activation': -Infinity };
+
+            for (var i = 0; i < keys.length; i++) {
+                if (connections[keys[i]].in_neuron.activation > max.activation) {
+                    max.activation = connections[keys[i]].in_neuron.activation;
+                    max.derivative = connections[keys[i]].in_neuron.derivative;
+                }
+            }
+
+            this.activation = max.activation;
+            this.derivative = max.derivative;
+        } else {
+            let activation = this.bias;
+            Object.values(this.connections.in).forEach((connection) => {
+                activation += connection.in_neuron.activation * connection.params.weight;
+            });
+        
+            this.activation = this.layer.rectifier(activation, false);
+            this.derivative = this.layer.rectifier(activation, true);
+        }
     }
 
     propagate(target) {

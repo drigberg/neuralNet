@@ -293,4 +293,119 @@ describe('Convolutional Layers', () => {
             });
         });
     });
+
+    describe('Pooling Layers', () => {
+        describe('can be created', () => {
+            let net;
+    
+            beforeEach(() => {
+                net = new Net({
+                    'architecture': [7, 7, 7],
+                    'learning_rate': 0.0000002
+                });
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 4],
+                    'depth': 1,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
+            });
+    
+            it('when spatial extent is compatible with input architecture', () => {
+                net.addPoolingLayer({
+                    'spatial_extent': 2
+                });
+    
+                expect(Object.keys(net.finalLayer.neurons)).to.have.length(16);
+            });
+        });
+    
+        describe('backpropagation:', () => {
+            let net;
+    
+            beforeEach(() => {
+                net = new Net({
+                    'architecture': [9, 9, 3],
+                    'learning_rate': 0.000000002
+                });
+    
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 1],
+                    'depth': 2,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
+    
+                net.addPoolingLayer({
+                    'spatial_extent': 2
+                });
+    
+                net.addFullyConnectedLayer({
+                    'architecture': [2],
+                    'rectifier': rectifiers.identity,
+                });
+            });
+    
+            it('all activations are numbers', () => {
+                return net.loadImage(__dirname + '/data/gabri_size_9.png')
+                .then((image) => {
+                    net.learn(image, [0, 1]);
+    
+                    const pooling_neurons = net.layers[1].neurons;
+                    const neuron_keys = Object.keys(pooling_neurons);
+                    let all_numbers = true;
+    
+                    for (var i = 0; i < neuron_keys.length; i++) {
+                        const activation = pooling_neurons[neuron_keys[i]].activation;
+                        if (typeof activation !== 'number') {
+                            all_numbers = false;
+                            break;
+                        }
+                    }
+    
+                    expect(all_numbers).to.be.true;
+                });
+            });
+    
+            it('all activations are not zero', () => {
+                return net.loadImage(__dirname + '/data/gabri_size_9.png')
+                .then((image) => {
+                    for (var j = 0; j < 100; j++) {
+                        net.learn(image, [Math.random(), Math.random()]);
+                    }
+    
+                    const pooling_neurons = net.layers[1].neurons;
+                    const neuron_keys = Object.keys(pooling_neurons);
+                    let all_zeroes = true;
+    
+                    for (var i = 0; i < neuron_keys.length; i++) {
+                        const activation = pooling_neurons[neuron_keys[i]].activation;
+    
+                        if (activation !== 0) {
+                            all_zeroes = false;
+                            break;
+                        }
+                    }
+    
+                    expect(all_zeroes).to.be.false;
+                });
+            });
+    
+            it('predictions are numbers', () => {
+                return net.loadImage(__dirname + '/data/gabri_size_9.png')
+                .then((image) => {
+                    for (var j = 0; j < 100; j++) {
+                        net.learn(image, [Math.random(), Math.random()]);
+                    }
+    
+                    const prediction = net.predict(image, [Math.random(), Math.random()]);
+                    const are_numbers = typeof prediction[0] === 'number' && typeof prediction[1] === 'number';
+                    const are_not_NaN = (Boolean(prediction[0]) || prediction[0] === 0) &&
+                        (Boolean(prediction[1]) || prediction[1] === 0);
+                    expect(are_numbers).to.be.true;
+                    expect(are_not_NaN).to.be.true;
+                });
+            });
+        });
+    });
 });
