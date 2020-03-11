@@ -46,12 +46,11 @@ class Net {
     }
 
     /**
-     * 
-     * @param {*} input 
+     * Assigns activations to input layer
+     * @param {Array<Number>} input 
      */
-    navigateInput(input) {
+    assignInputActivations(input) {
         const input_layer = this.input_layer;
-        nest(input_layer.architecture, input);
 
         /**
          * Recursive function to assign activations
@@ -60,19 +59,22 @@ class Net {
          * @param {*} index 
          * @param {*} state 
          */
-        function nest(arch, arr_or_value, index, state) {
+        function nest(arr_or_value, index, state) {
             index = index || 0;
-            if (index < arch.length) {
-                for (var i = 0; i < arch[index]; i++) {
+            if (index < input_layer.architecture.length) {
+                // nest through dimensions
+                for (var i = 0; i < input_layer.architecture[index]; i++) {
                     const nested_state = state ? [state, i].join('.'): String(i);
                     const nested_arr = arr_or_value[i];
-                    nest(arch, nested_arr, index + 1, nested_state);
+                    nest(nested_arr, index + 1, nested_state);
                 }
             } else {
+                // assign value to neuron
                 input_layer.neurons[state].activation = arr_or_value;
-                
             }
         }
+
+        nest(input);
     }
 
     /**
@@ -84,7 +86,7 @@ class Net {
             throw new Error('Input must be an array!');
         }
 
-        this.navigateInput(input);
+        this.assignInputActivations(input);
 
         return this.activate();
     }

@@ -214,7 +214,7 @@ class ConvolutionalLayer extends Layer {
 
         for (var filter_no = 0; filter_no < depth; filter_no++) {
             // prefix all neuron states with filter number (ex: "3x0.3.1")
-            assignNeuronsRecursive(this.architecture, null, null, filter_no);
+            assignNeuronsRecursive(null, null, filter_no);
         }
     }
 
@@ -479,7 +479,7 @@ class PoolingLayer extends Layer {
             }
         }
 
-        nest(layer.architecture);
+        nest();
     }
 
     /**
