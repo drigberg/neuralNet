@@ -22,8 +22,8 @@ class Neuron {
         this.bias = 0;
 
         this.connections = {
-            'out': {},
-            'in': {}
+            out: {},
+            in: {}
         };
 
         // create connections to all neurons in input layer
@@ -36,9 +36,9 @@ class Neuron {
                 sum += weight;
 
                 const connection = new Connection({
-                    'in_neuron': neuron,
-                    'out_neuron': this,
-                    'weight': weight
+                    in_neuron: neuron,
+                    out_neuron: this,
+                    weight
                 });
 
                 // update on both ends of the connection
@@ -59,7 +59,10 @@ class Neuron {
         const keys = Object.keys(connections);
 
         if (this.pooling) {
-            const max = { 'derivative': null, 'activation': -Infinity };
+            const max = {
+                derivative: null,
+                activation: -Infinity
+            };
 
             for (var i = 0; i < keys.length; i++) {
                 if (connections[keys[i]].in_neuron.activation > max.activation) {

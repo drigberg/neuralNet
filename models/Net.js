@@ -15,9 +15,9 @@ const {ConvolutionalLayer,FullyConnectedLayer,PoolingLayer} = require('./Layer')
 class Net {
     constructor({ architecture, learning_rate }) {
         const input_args = {
-            'is_input': true,
-            'architecture': architecture,
-            'net': this
+            is_input: true,
+            net: this,
+            architecture,
         };
 
         this.predictions = 0;

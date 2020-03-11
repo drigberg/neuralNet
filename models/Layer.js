@@ -130,17 +130,17 @@ class ConvolutionalLayer extends Layer {
 
         for (var i = 0; i < depth; i++) {
             const filter = this.createFilterFromArchitecture({
-                'net': this,
-                'architecture': filter_structure
+                net: this,
+                architecture: filter_structure
             });
 
             this.filters.push(filter);
         }
 
         this.architecture = this.generateArchitecture({
-            'input_structure': in_layer.architecture,
-            'filter_structure': filter_structure,
-            'stride': stride
+            input_structure: in_layer.architecture,
+            filter_structure,
+            stride,
         });
 
         const that = this;
@@ -162,12 +162,12 @@ class ConvolutionalLayer extends Layer {
 
                 that.neurons[state] = new Neuron(neuron_args);
                 that.createConnections({
-                    'neuron': that.neurons[state],
-                    'filter_structure': filter_structure,
-                    'filter_no': filter_no,
-                    'in_layer': in_layer,
-                    'neuron_state': state.split('x')[1],
-                    'stride': stride,
+                    neuron: that.neurons[state],
+                    neuron_state: state.split('x')[1],
+                    filter_structure,
+                    filter_no,
+                    in_layer,
+                    stride,
                 }); 
             }
         }
@@ -185,10 +185,10 @@ class ConvolutionalLayer extends Layer {
 
             if (!num_neurons || !Number.isInteger(num_neurons) || num_neurons < 1) {
                 throw errors.errors.INCOMPATIBLE_FILTER({
-                    'input_length': input_structure[j],
-                    'filter_length': filter_structure[j],
-                    'stride': stride,
-                    'res': num_neurons
+                    input_length: input_structure[j],
+                    filter_length: filter_structure[j],
+                    res: num_neurons,
+                    stride,
                 });
             }
             architecture.push(num_neurons);
@@ -206,9 +206,9 @@ class ConvolutionalLayer extends Layer {
         const in_neuron = in_layer.neurons[in_neuron_key];
 
         const connection = new Connection({
-            'in_neuron': in_neuron,
-            'out_neuron': neuron,
-            'shared_params': neuron.layer.filters[filter_no][state]
+            in_neuron,
+            out_neuron: neuron,
+            shared_params: neuron.layer.filters[filter_no][state]
         });
 
         // update on both ends of the connection
@@ -301,24 +301,24 @@ class PoolingLayer extends Layer {
             throw new Error('spatial_extent must be an integer greater than 1');
         }
 
-        this.getPoolingArchitecture({ 'input_architecture': in_layer.architecture, 'spatial_extent': spatial_extent });
+        this.getPoolingArchitecture({ 
+            input_architecture: in_layer.architecture,
+            spatial_extent
+        });
 
         this.createFromArchitecture({
-            'layer': this,
-            'architecture': this.architecture,
-            'in_layer': in_layer,
-            'input_architecture': in_layer.architecture,
-            'neuron_args': neuron_args,
-            'spatial_extent': spatial_extent
+            layer: this,
+            neuron_args,
+            in_layer,
+            spatial_extent,
         });
     }
 
-    createFromArchitecture({ architecture, in_layer, layer, neuron_args, spatial_extent }) {
-        layer.architecture = architecture;
+    createFromArchitecture({ in_layer, layer, neuron_args, spatial_extent }) {
         layer.neurons = {};
         const input_filters = in_layer.filters.length;
 
-        nest(architecture);
+        nest(layer.architecture);
 
         function nest(arch, index, state) {
             index = index || 0;
@@ -341,9 +341,9 @@ class PoolingLayer extends Layer {
 
                         // connection must have weight 1 for error to propagate
                         const connection = new Connection({
-                            'in_neuron': in_neuron,
-                            'out_neuron': neuron,
-                            'weight': 1
+                            out_neuron: neuron,
+                            weight: 1,
+                            in_neuron
                         });
 
                         // update on both ends of the connection
