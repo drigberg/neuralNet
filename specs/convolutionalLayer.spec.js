@@ -7,17 +7,12 @@ const errors = require('../lib/errors');
 
 describe('Convolutional Layers', () => {
     describe('as first hidden layer', () => {
-        let net;
-
-        beforeEach(() => {
-            net = new Net({
-                'architecture': [3, 3, 3],
-                'learning_rate': 0.02
-            });
-        });
-
         describe('can be created', () => {
             it('when filter has same number of dimensions as input layer', () => {
+                const net = new Net({
+                    'architecture': [3, 3, 3],
+                    'learning_rate': 0.02
+                });
                 net.addConvolutionalLayer({
                     'filter_structure': [3, 3, 3],
                     'depth': 1,
@@ -29,6 +24,10 @@ describe('Convolutional Layers', () => {
             });
 
             it('when filter is smaller than the input layer', () => {
+                const net = new Net({
+                    'architecture': [3, 3, 3],
+                    'learning_rate': 0.02
+                });
                 net.addConvolutionalLayer({
                     'filter_structure': [1, 1, 1],
                     'depth': 1,
@@ -40,6 +39,10 @@ describe('Convolutional Layers', () => {
             });
 
             it('with multiple filters', () => {
+                const net = new Net({
+                    'architecture': [3, 3, 3],
+                    'learning_rate': 0.02
+                });
                 net.addConvolutionalLayer({
                     'filter_structure': [3, 3, 3],
                     'depth': 6,
@@ -51,7 +54,7 @@ describe('Convolutional Layers', () => {
             });
 
             it('with stride > 1', () => {
-                net = new Net({
+                const net = new Net({
                     'architecture': [6, 6, 3],
                     'learning_rate': 0.02
                 });
@@ -70,6 +73,10 @@ describe('Convolutional Layers', () => {
         describe('cannot be created', () => {
             it('with filter larger than input', () => {
                 let error_thrown = false;
+                const net = new Net({
+                    'architecture': [3, 3, 3],
+                    'learning_rate': 0.02
+                });
 
                 try {
                     net.addConvolutionalLayer({
@@ -88,6 +95,10 @@ describe('Convolutional Layers', () => {
 
             it('with stride that pushes filter beyond input', () => {
                 let error_thrown = false;
+                const net = new Net({
+                    'architecture': [3, 3, 3],
+                    'learning_rate': 0.02
+                });
 
                 try {
                     net.addConvolutionalLayer({
@@ -107,23 +118,18 @@ describe('Convolutional Layers', () => {
     });
 
     describe('after other convolutional layers', () => {
-        let net;
-
-        beforeEach(() => {
-            net = new Net({
-                'architecture': [7, 7, 7],
-                'learning_rate': 0.02
-            });
-            net.addConvolutionalLayer({
-                'filter_structure': [4, 4, 4],
-                'depth': 1,
-                'stride': 1,
-                'rectifier': rectifiers.relu,
-            });
-        });
-
         describe('can be created', () => {
             it('when filter has same number of dimensions as input layer', () => {
+                const net = new Net({
+                    'architecture': [7, 7, 7],
+                    'learning_rate': 0.02
+                });
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 4],
+                    'depth': 1,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
                 net.addConvolutionalLayer({
                     'filter_structure': [3, 3, 3],
                     'depth': 1,
@@ -135,6 +141,16 @@ describe('Convolutional Layers', () => {
             });
 
             it('when filter is smaller than the input layer', () => {
+                const net = new Net({
+                    'architecture': [7, 7, 7],
+                    'learning_rate': 0.02
+                });
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 4],
+                    'depth': 1,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
                 net.addConvolutionalLayer({
                     'filter_structure': [1, 1, 1],
                     'depth': 1,
@@ -146,6 +162,16 @@ describe('Convolutional Layers', () => {
             });
 
             it('with multiple filters', () => {
+                const net = new Net({
+                    'architecture': [7, 7, 7],
+                    'learning_rate': 0.02
+                });
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 4],
+                    'depth': 1,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
                 net.addConvolutionalLayer({
                     'filter_structure': [3, 3, 3],
                     'depth': 6,
@@ -157,7 +183,7 @@ describe('Convolutional Layers', () => {
             });
 
             it('with stride > 1', () => {
-                net = new Net({
+                const net = new Net({
                     'architecture': [6, 6, 3],
                     'learning_rate': 0.02
                 });
@@ -182,6 +208,16 @@ describe('Convolutional Layers', () => {
         describe('cannot be created', () => {
             it('with filter larger than input', () => {
                 let error_thrown = false;
+                const net = new Net({
+                    'architecture': [7, 7, 7],
+                    'learning_rate': 0.02
+                });
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 4],
+                    'depth': 1,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
 
                 try {
                     net.addConvolutionalLayer({
@@ -200,6 +236,16 @@ describe('Convolutional Layers', () => {
 
             it('with stride that pushes filter beyond input', () => {
                 let error_thrown = false;
+                const net = new Net({
+                    'architecture': [7, 7, 7],
+                    'learning_rate': 0.02
+                });
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 4],
+                    'depth': 1,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
 
                 try {
                     net.addConvolutionalLayer({
@@ -219,10 +265,8 @@ describe('Convolutional Layers', () => {
     });
 
     describe('backpropagation:', () => {
-        let net;
-
-        beforeEach(() => {
-            net = new Net({
+        it('all activations are numbers', () => {
+            const net = new Net({
                 'architecture': [9, 9, 3],
                 'learning_rate': 0.0000002
             });
@@ -238,9 +282,6 @@ describe('Convolutional Layers', () => {
                 'architecture': [2],
                 'rectifier': rectifiers.identity,
             });
-        });
-
-        it('all activations are numbers', () => {
             return net.loadImage(__dirname + '/data/gabri_size_9.png')
             .then((image) => {
                 net.learn(image, [0, 1]);
@@ -258,6 +299,22 @@ describe('Convolutional Layers', () => {
         });
 
         it('all activations are not zero', () => {
+            const net = new Net({
+                'architecture': [9, 9, 3],
+                'learning_rate': 0.0000002
+            });
+
+            net.addConvolutionalLayer({
+                'filter_structure': [4, 4, 3],
+                'depth': 3,
+                'stride': 1,
+                'rectifier': rectifiers.relu,
+            });
+
+            net.addFullyConnectedLayer({
+                'architecture': [2],
+                'rectifier': rectifiers.identity,
+            });
             return net.loadImage(__dirname + '/data/gabri_size_9.png')
             .then((image) => {
                 for (var j = 0; j < 100; j++) {
@@ -277,6 +334,22 @@ describe('Convolutional Layers', () => {
         });
 
         it('predictions are numbers', () => {
+            const net = new Net({
+                'architecture': [9, 9, 3],
+                'learning_rate': 0.0000002
+            });
+
+            net.addConvolutionalLayer({
+                'filter_structure': [4, 4, 3],
+                'depth': 3,
+                'stride': 1,
+                'rectifier': rectifiers.relu,
+            });
+
+            net.addFullyConnectedLayer({
+                'architecture': [2],
+                'rectifier': rectifiers.identity,
+            });
             return net.loadImage(__dirname + '/data/gabri_size_9.png')
             .then((image) => {
                 for (var j = 0; j < 100; j++) {
@@ -296,10 +369,8 @@ describe('Convolutional Layers', () => {
 
     describe('Pooling Layers', () => {
         describe('can be created', () => {
-            let net;
-    
-            beforeEach(() => {
-                net = new Net({
+            it('when spatial extent is compatible with input architecture', () => {
+                const net = new Net({
                     'architecture': [7, 7, 7],
                     'learning_rate': 0.0000002
                 });
@@ -309,9 +380,6 @@ describe('Convolutional Layers', () => {
                     'stride': 1,
                     'rectifier': rectifiers.relu,
                 });
-            });
-    
-            it('when spatial extent is compatible with input architecture', () => {
                 net.addPoolingLayer({
                     'spatial_extent': 2
                 });
@@ -321,21 +389,19 @@ describe('Convolutional Layers', () => {
         });
     
         describe('backpropagation:', () => {
-            let net;
-    
-            beforeEach(() => {
-                net = new Net({
+            it('all activations are numbers', () => {
+                const net = new Net({
                     'architecture': [9, 9, 3],
                     'learning_rate': 0.000000002
                 });
     
                 net.addConvolutionalLayer({
-                    'filter_structure': [4, 4, 1],
+                    'filter_structure': [4, 4, 3],
                     'depth': 2,
                     'stride': 1,
                     'rectifier': rectifiers.relu,
                 });
-    
+
                 net.addPoolingLayer({
                     'spatial_extent': 2
                 });
@@ -344,9 +410,6 @@ describe('Convolutional Layers', () => {
                     'architecture': [2],
                     'rectifier': rectifiers.identity,
                 });
-            });
-    
-            it('all activations are numbers', () => {
                 return net.loadImage(__dirname + '/data/gabri_size_9.png')
                 .then((image) => {
                     net.learn(image, [0, 1]);
@@ -368,6 +431,26 @@ describe('Convolutional Layers', () => {
             });
     
             it('all activations are not zero', () => {
+                const net = new Net({
+                    'architecture': [9, 9, 3],
+                    'learning_rate': 0.000000002
+                });
+    
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 3],
+                    'depth': 2,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
+
+                net.addPoolingLayer({
+                    'spatial_extent': 2
+                });
+    
+                net.addFullyConnectedLayer({
+                    'architecture': [2],
+                    'rectifier': rectifiers.identity,
+                });
                 return net.loadImage(__dirname + '/data/gabri_size_9.png')
                 .then((image) => {
                     for (var j = 0; j < 100; j++) {
@@ -392,6 +475,26 @@ describe('Convolutional Layers', () => {
             });
     
             it('predictions are numbers', () => {
+                const net = new Net({
+                    'architecture': [9, 9, 3],
+                    'learning_rate': 0.000000002
+                });
+    
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 3],
+                    'depth': 2,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
+
+                net.addPoolingLayer({
+                    'spatial_extent': 2
+                });
+    
+                net.addFullyConnectedLayer({
+                    'architecture': [2],
+                    'rectifier': rectifiers.identity,
+                });
                 return net.loadImage(__dirname + '/data/gabri_size_9.png')
                 .then((image) => {
                     for (var j = 0; j < 100; j++) {
