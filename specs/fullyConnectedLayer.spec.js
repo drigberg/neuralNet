@@ -1,7 +1,7 @@
 
 const { expect } = require('chai');
-const {FullyConnectedLayer} = require('../models/Layer');
-const {Net} = require('../models/Net');
+const {FullyConnectedLayer} = require('../models/layer');
+const {Net} = require('../models/net');
 const rectifiers = require('../lib/rectifiers');
 
 

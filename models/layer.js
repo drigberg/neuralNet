@@ -3,7 +3,7 @@
  * Module dependencies
  */
 
-const {Connection, ConnectionParams, Neuron} = require('./Neuron');
+const {Connection, ConnectionParams, Neuron} = require('./neuron');
 const errors = require('../lib/errors');
 
 /**

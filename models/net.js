@@ -5,7 +5,7 @@
 const fs = require('fs');
 const PNG = require('pngjs').PNG;
 
-const {ConvolutionalLayer,FullyConnectedLayer,PoolingLayer} = require('./Layer');
+const {ConvolutionalLayer,FullyConnectedLayer,PoolingLayer} = require('./layer');
 
 /**
  * Module
