@@ -1,6 +1,6 @@
 
 const { expect } = require('chai');
-const {Net} = require('../models/net');
+const {Net} = require('../lib/net');
 const rectifiers = require('../lib/rectifiers');
 const errors = require('../lib/errors');
 
