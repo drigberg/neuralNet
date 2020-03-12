@@ -1,7 +1,6 @@
 
 const { expect } = require('chai');
-const {FullyConnectedLayer} = require('../lib/layer');
-const {Net} = require('../lib/net');
+const { Net } = require('../lib/net');
 const rectifiers = require('../lib/rectifiers');
 
 
@@ -9,47 +8,53 @@ describe('Fully Connected Layers', () => {
     describe('as input', () => {
         describe('can be created', () => {
             it('with one-dimensional architecture', () => {
-                const layer = new FullyConnectedLayer({
-                    'is_input': true,
-                    'architecture': [3]
+                const net = new Net({
+                    learning_rate: 0.02,
+                    input_architecture: [3],
+                    layer_configs: [],
                 });
 
-                expect(Object.keys(layer.neurons)).to.have.length(3);
+                expect(Object.keys(net.layers[0].neurons)).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
-                const layer = new FullyConnectedLayer({
-                    'is_input': true,
-                    'architecture': [3, 4]
+                const net = new Net({
+                    learning_rate: 0.02,
+                    input_architecture: [3, 4],
+                    layer_configs: [],
                 });
 
-                expect(Object.keys(layer.neurons)).to.have.length(12);
+                expect(Object.keys(net.layers[0].neurons)).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
-                const layer = new FullyConnectedLayer({
-                    'is_input': true,
-                    'architecture': [3, 4, 5]
+                const net = new Net({
+                    learning_rate: 0.02,
+                    input_architecture: [3, 4, 5],
+                    layer_configs: [],
                 });
-                expect(Object.keys(layer.neurons)).to.have.length(60);
+                expect(Object.keys(net.layers[0].neurons)).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
-                const layer = new FullyConnectedLayer({
-                    'is_input': true,
-                    'architecture': [3, 4, 5, 6]
+                const net = new Net({
+                    learning_rate: 0.02,
+                    input_architecture: [3, 4, 5, 6],
+                    layer_configs: [],
                 });
-                expect(Object.keys(layer.neurons)).to.have.length(360);
+                expect(Object.keys(net.layers[0].neurons)).to.have.length(360);
             });
         });
 
         describe('cannot be created', () => {
-            it('with undefined architecture', () => {
+            it('with empty architecture', () => {
                 let error_thrown = false;
 
                 try {
-                    new FullyConnectedLayer({
-                        'is_input': true
+                    new Net({
+                        input_architecture: [],
+                        learning_rate: 0.02,
+                        layer_configs: []
                     });
                 }
                 catch (err) {
@@ -63,47 +68,74 @@ describe('Fully Connected Layers', () => {
     });
 
     describe('as first hidden layer', () => {
-        let net;
-
-        beforeEach(() => {
-            net = new Net({
-                'architecture': [3],
-                'learning_rate': 0.02
-            });
-        });
-
         describe('can be created', () => {
             it('with one-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3, 4],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3, 4, 5],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3, 4, 5, 6],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5, 6],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(360);
@@ -115,9 +147,18 @@ describe('Fully Connected Layers', () => {
                 let error_thrown = false;
 
                 try {
-                    net.addFullyConnectedLayer({
-                        'architecture': [],
-                        'rectifier': rectifiers.relu,
+                    new Net({
+                        input_architecture: [3],
+                        learning_rate: 0.02,
+                        layer_configs: [
+                            {
+                                type: 'FULLY_CONNECTED',
+                                options: {
+                                    architecture: [],
+                                    rectifier: rectifiers.relu,
+                                }
+                            }
+                        ]
                     });
                 }
                 catch (err) {
@@ -131,52 +172,102 @@ describe('Fully Connected Layers', () => {
     });
 
     describe('as further hidden layers', () => {
-        let net;
-
-        beforeEach(() => {
-            net = new Net({
-                'architecture': [3],
-                'learning_rate': 0.02
-            });
-
-            net.addFullyConnectedLayer({
-                'architecture': [3, 4, 5],
-                'rectifier': rectifiers.relu,
-            });
-        });
-
         describe('can be created', () => {
             it('with one-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5],
+                                rectifier: rectifiers.relu,
+                            }
+                        },
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3, 4],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5],
+                                rectifier: rectifiers.relu,
+                            }
+                        },
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3, 4, 5],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5],
+                                rectifier: rectifiers.relu,
+                            }
+                        },
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
-                net.addFullyConnectedLayer({
-                    'architecture': [3, 4, 5, 6],
-                    'rectifier': rectifiers.relu,
+                const net = new Net({
+                    input_architecture: [3],
+                    learning_rate: 0.02,
+                    layer_configs: [
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5],
+                                rectifier: rectifiers.relu,
+                            }
+                        },
+                        {
+                            type: 'FULLY_CONNECTED',
+                            options: {
+                                architecture: [3, 4, 5, 6],
+                                rectifier: rectifiers.relu,
+                            }
+                        }
+                    ]
                 });
 
                 expect(Object.keys(net.finalLayer.neurons)).to.have.length(360);
@@ -188,9 +279,25 @@ describe('Fully Connected Layers', () => {
                 let error_thrown = false;
 
                 try {
-                    net.addFullyConnectedLayer({
-                        'architecture': [],
-                        'rectifier': rectifiers.relu,
+                    new Net({
+                        input_architecture: [3],
+                        learning_rate: 0.02,
+                        layer_configs: [
+                            {
+                                type: 'FULLY_CONNECTED',
+                                options: {
+                                    architecture: [3, 4, 5],
+                                    rectifier: rectifiers.relu,
+                                }
+                            },
+                            {
+                                type: 'FULLY_CONNECTED',
+                                options: {
+                                    architecture: [],
+                                    rectifier: rectifiers.relu,
+                                }
+                            }
+                        ]
                     });
                 }
                 catch (err) {
@@ -204,26 +311,28 @@ describe('Fully Connected Layers', () => {
     });
 
     describe('backpropagation:', () => {
-        let net;
-
-        beforeEach(() => {
-            net = new Net({
-                'architecture': [2],
-                'learning_rate': 0.02
-            });
-
-            net.addFullyConnectedLayer({
-                'architecture': [3],
-                'rectifier': rectifiers.step,
-            });
-
-            net.addFullyConnectedLayer({
-                'architecture': [2],
-                'rectifier': rectifiers.step,
-            });
-        });
-
         it('all activations are numbers', () => {
+            const net = new Net({
+                input_architecture: [2],
+                learning_rate: 0.02,
+                layer_configs: [
+                    {
+                        type: 'FULLY_CONNECTED',
+                        options: {
+                            architecture: [3],
+                            rectifier: rectifiers.step,
+                        }
+                    },
+                    {
+                        type: 'FULLY_CONNECTED',
+                        options: {
+                            architecture: [2],
+                            rectifier: rectifiers.step,
+                        }
+                    },
+                ]
+            });
+
             for (var j = 0; j < 100; j++) {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
@@ -244,6 +353,27 @@ describe('Fully Connected Layers', () => {
         });
 
         it('all activations are not zero', () => {
+            const net = new Net({
+                input_architecture: [2],
+                learning_rate: 0.02,
+                layer_configs: [
+                    {
+                        type: 'FULLY_CONNECTED',
+                        options: {
+                            architecture: [3],
+                            rectifier: rectifiers.step,
+                        }
+                    },
+                    {
+                        type: 'FULLY_CONNECTED',
+                        options: {
+                            architecture: [2],
+                            rectifier: rectifiers.step,
+                        }
+                    },
+                ]
+            });
+
             for (var j = 0; j < 100; j++) {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
