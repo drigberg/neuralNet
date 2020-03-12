@@ -16,7 +16,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [3, 3, 3],
+                                filter_architecture: [3, 3, 3],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -36,7 +36,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [1, 1, 1],
+                                filter_architecture: [1, 1, 1],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -55,7 +55,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [3, 3, 3],
+                                filter_architecture: [3, 3, 3],
                                 depth: 6,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -75,7 +75,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [3, 3, 3],
+                                filter_architecture: [3, 3, 3],
                                 depth: 1,
                                 stride: 3,
                                 rectifier: rectifiers.relu,
@@ -99,7 +99,7 @@ describe('Convolutional Layers', () => {
                             {
                                 type: 'CONVOLUTIONAL',
                                 options: {
-                                    filter_structure: [4, 4, 3],
+                                    filter_architecture: [4, 4, 3],
                                     depth: 1,
                                     stride: 1,
                                     rectifier: rectifiers.relu,
@@ -126,7 +126,7 @@ describe('Convolutional Layers', () => {
                             {
                                 type: 'CONVOLUTIONAL',
                                 options: {
-                                    filter_structure: [2, 2, 2],
+                                    filter_architecture: [2, 2, 2],
                                     depth: 1,
                                     stride: 2,
                                     rectifier: rectifiers.relu,
@@ -154,7 +154,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [4, 4, 4],
+                                filter_architecture: [4, 4, 4],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -163,7 +163,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [3, 3, 3],
+                                filter_architecture: [3, 3, 3],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -183,7 +183,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [4, 4, 4],
+                                filter_architecture: [4, 4, 4],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -192,7 +192,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [1, 1, 1],
+                                filter_architecture: [1, 1, 1],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -212,7 +212,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [4, 4, 4],
+                                filter_architecture: [4, 4, 4],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -221,7 +221,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [3, 3, 3],
+                                filter_architecture: [3, 3, 3],
                                 depth: 6,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -241,7 +241,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [1, 1, 1],
+                                filter_architecture: [1, 1, 1],
                                 depth: 1,
                                 stride: 1,
                                 rectifier: rectifiers.relu,
@@ -250,7 +250,7 @@ describe('Convolutional Layers', () => {
                         {
                             type: 'CONVOLUTIONAL',
                             options: {
-                                filter_structure: [3, 3, 3],
+                                filter_architecture: [3, 3, 3],
                                 depth: 1,
                                 stride: 3,
                                 rectifier: rectifiers.relu,
@@ -274,7 +274,7 @@ describe('Convolutional Layers', () => {
                             {
                                 type: 'CONVOLUTIONAL',
                                 options: {
-                                    filter_structure: [4, 4, 4],
+                                    filter_architecture: [4, 4, 4],
                                     depth: 1,
                                     stride: 1,
                                     rectifier: rectifiers.relu,
@@ -283,7 +283,7 @@ describe('Convolutional Layers', () => {
                             {
                                 type: 'CONVOLUTIONAL',
                                 options: {
-                                    filter_structure: [5, 5, 3],
+                                    filter_architecture: [5, 5, 3],
                                     depth: 1,
                                     stride: 1,
                                     rectifier: rectifiers.relu,
@@ -309,7 +309,7 @@ describe('Convolutional Layers', () => {
                             {
                                 type: 'CONVOLUTIONAL',
                                 options: {
-                                    filter_structure: [4, 4, 4],
+                                    filter_architecture: [4, 4, 4],
                                     depth: 1,
                                     stride: 1,
                                     rectifier: rectifiers.relu,
@@ -318,7 +318,7 @@ describe('Convolutional Layers', () => {
                             {
                                 type: 'CONVOLUTIONAL',
                                 options: {
-                                    filter_structure: [2, 2, 2],
+                                    filter_architecture: [2, 2, 2],
                                     depth: 1,
                                     stride: 3,
                                     rectifier: rectifiers.relu,
@@ -345,7 +345,7 @@ describe('Convolutional Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
+                            filter_architecture: [4, 4, 3],
                             depth: 3,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -385,7 +385,7 @@ describe('Convolutional Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
+                            filter_architecture: [4, 4, 3],
                             depth: 3,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -427,7 +427,7 @@ describe('Convolutional Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
+                            filter_architecture: [4, 4, 3],
                             depth: 3,
                             stride: 1,
                             rectifier: rectifiers.relu,

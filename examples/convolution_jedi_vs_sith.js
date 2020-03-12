@@ -20,7 +20,7 @@ function task() {
             {
                 type: 'CONVOLUTIONAL',
                 options: {
-                    filter_structure: [3, 3, 1],
+                    filter_architecture: [3, 3, 1],
                     depth: 3,
                     stride: 1,
                     rectifier: rectifiers.relu,

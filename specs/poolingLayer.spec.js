@@ -15,7 +15,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 4],
+                            filter_architecture: [4, 4, 4],
                             depth: 1,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -43,7 +43,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
+                            filter_architecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -93,7 +93,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
+                            filter_architecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -146,7 +146,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
+                            filter_architecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -191,7 +191,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
+                            filter_architecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -200,8 +200,8 @@ describe('Pooling Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_structure: [4, 4, 3],
-                            depth: 2,
+                            filter_architecture: [4, 4, 1],
+                            depth: 1,
                             stride: 1,
                             rectifier: rectifiers.relu,
                         }
