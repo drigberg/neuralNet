@@ -509,6 +509,37 @@ describe('Convolutional Layers', () => {
                     expect(are_not_NaN).to.be.true;
                 });
             });
+
+            it('[This scenario fails! Figure out why!]', () => {
+                const net = new Net({
+                    'architecture': [9, 9, 3],
+                    'learning_rate': 0.000000002
+                });
+    
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 3],
+                    'depth': 2,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
+
+                net.addConvolutionalLayer({
+                    'filter_structure': [4, 4, 1],
+                    'depth': 2,
+                    'stride': 1,
+                    'rectifier': rectifiers.relu,
+                });
+
+                // Fails here
+                net.addPoolingLayer({
+                    'spatial_extent': 3
+                });
+    
+                net.addFullyConnectedLayer({
+                    'architecture': [2],
+                    'rectifier': rectifiers.identity,
+                });
+            });
         });
     });
 });
