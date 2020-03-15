@@ -14,7 +14,7 @@ describe('Fully Connected Layers', () => {
                     layerConfigs: [],
                 });
 
-                expect(net.layers[0].states).to.have.length(3);
+                expect(net.inputLayer.states).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
@@ -24,7 +24,7 @@ describe('Fully Connected Layers', () => {
                     layerConfigs: [],
                 });
 
-                expect(net.layers[0].states).to.have.length(12);
+                expect(net.inputLayer.states).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
@@ -33,7 +33,7 @@ describe('Fully Connected Layers', () => {
                     inputArchitecture: [3, 4, 5],
                     layerConfigs: [],
                 });
-                expect(net.layers[0].states).to.have.length(60);
+                expect(net.inputLayer.states).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
@@ -42,7 +42,7 @@ describe('Fully Connected Layers', () => {
                     inputArchitecture: [3, 4, 5, 6],
                     layerConfigs: [],
                 });
-                expect(net.layers[0].states).to.have.length(360);
+                expect(net.inputLayer.states).to.have.length(360);
             });
         });
 
@@ -339,8 +339,8 @@ describe('Fully Connected Layers', () => {
 
 
             let allNumbers = true;
-            net.layers[0].states.forEach((state) => {
-                const activation = net.layers[0].neuronsByState[state].activation;
+            net.inputLayer.states.forEach((state) => {
+                const activation = net.inputLayer.neuronsByState[state].activation;
                 if (typeof activation !== 'number') {
                     allNumbers = false;
                 }
@@ -375,8 +375,8 @@ describe('Fully Connected Layers', () => {
             }
 
             let allZeroes = true;
-            net.layers[0].states.forEach((state) => {
-                const activation = net.layers[0].neuronsByState[state].activation;
+            net.inputLayer.states.forEach((state) => {
+                const activation = net.inputLayer.neuronsByState[state].activation;
                 if (activation !== 0) {
                     allZeroes = false;
                 }

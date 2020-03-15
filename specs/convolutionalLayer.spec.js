@@ -367,7 +367,7 @@ describe('Convolutional Layers', () => {
 
                 let allNumbers = true;
 
-                Object.values(net.layers[0].neuronsByState).forEach((neuron) => {
+                Object.values(net.inputLayer.neuronsByState).forEach((neuron) => {
                     if (typeof neuron.activation !== 'number') {
                         allNumbers = false;
                     }
@@ -409,7 +409,7 @@ describe('Convolutional Layers', () => {
 
                 let allZeroes = true;
 
-                Object.values(net.layers[0].neuronsByState).forEach((neuron) => {
+                Object.values(net.inputLayer.neuronsByState).forEach((neuron) => {
                     if (neuron.activation !== 0) {
                         allZeroes = false;
                     }
