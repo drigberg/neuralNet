@@ -15,12 +15,12 @@ Create a net:
 ```javascript
 const net = new Net({
     architecture: [32, 32, 3],
-    learning_rate: 0.00001,
-    layer_configs: [
+    learningRate: 0.00001,
+    layerConfigs: [
         {
             type: 'CONVOLUTIONAL',
             options: {
-                filter_architecture: [3, 3, 1],
+                filterArchitecture: [3, 3, 1],
                 depth: 2,
                 stride: 1,
                 rectifier: rectifiers.relu,
@@ -41,16 +41,16 @@ const net = new Net({
 Load images and train:
 
 ```javascript
-let train_promises = [
+let trainPromises = [
     net.loadImageDirectory({"directory": "./data/training_9/jedi"}),
     net.loadImageDirectory({"directory": "./data/training_9/sith"})
 ]
 
-Promise.all(train_promises)
-.then(([jedi_images, sith_images]) => {
+Promise.all(trainPromises)
+.then(([jediImages, sithImages]) => {
     for (var i = 0; i < 100; i++) {
-        net.learn(jedi_images[i], [0, 1])
-        net.learn(sith_images[i], [1, 0])
+        net.learn(jediImages[i], [0, 1])
+        net.learn(sithImages[i], [1, 0])
     }
 })
 ```
@@ -59,9 +59,9 @@ Implement:
 
 ```javascript
 net.loadImage("./data/me.png")
-.then((image_of_me) => {
-    let jedi_or_sith = net.predict(image_of_me)
-    console.log(jedi_or_sith)
+.then((imageOfMe) => {
+    let jediOrSith = net.predict(imageOfMe)
+    console.log(jediOrSith)
 })
 ```
 
