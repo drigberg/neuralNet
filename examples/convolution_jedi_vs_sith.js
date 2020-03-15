@@ -2,12 +2,15 @@
  * Module dependencies
  */
 
+const {logger, LEVELS} = require('../lib/logger');
 const {Net} = require('../lib/net');
 const rectifiers = require('../lib/rectifiers');
 
 /**
  * Module
  */
+
+logger.setLogLevel(LEVELS.DEBUG);
 
 /**
  * Tests and reports accuracy
@@ -21,27 +24,27 @@ const rectifiers = require('../lib/rectifiers');
 function test(net, sith, jedi, sam, claude, tim) {
     sith.forEach((testImage) => {
         const prediction = net.predict(testImage);
-        console.log('Test prediction for sith:', prediction);
+        logger.info('Test prediction for sith:', prediction);
     });
 
     jedi.forEach((testImage) => {
         const prediction = net.predict(testImage);
-        console.log('Test prediction for jedi:', prediction);
+        logger.info('Test prediction for jedi:', prediction);
     });
 
     claude.forEach((testImage) => {
         const prediction = net.predict(testImage);
-        console.log('Test prediction for claude:', prediction);
+        logger.info('Test prediction for claude:', prediction);
     });
 
     tim.forEach((testImage) => {
         const prediction = net.predict(testImage);
-        console.log('Test prediction for tim:', prediction);
+        logger.info('Test prediction for tim:', prediction);
     });
 
     sam.forEach((testImage) => {
         const prediction = net.predict(testImage);
-        console.log('Test prediction for sam:', prediction);
+        logger.info('Test prediction for sam:', prediction);
     });
 }
 

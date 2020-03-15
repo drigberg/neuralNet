@@ -4,12 +4,15 @@
  * Module dependencies
  */
 
+const {logger, LEVELS} = require('../lib/logger');
 const {Net} = require('../lib/net');
 const rectifiers = require('../lib/rectifiers');
 
 /**
  * Module
  */
+
+logger.setLogLevel(LEVELS.DEBUG);
 
 /**
  * Example functionality

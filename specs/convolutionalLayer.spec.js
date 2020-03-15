@@ -450,7 +450,6 @@ describe('Convolutional Layers', () => {
                 }
 
                 const prediction = net.predict(image, [Math.random(), Math.random()]);
-                console.log(prediction);
                 const areNumbers = typeof prediction[0] === 'number' && typeof prediction[1] === 'number';
                 const areNotNaN = (Boolean(prediction[0]) || prediction[0] === 0) &&
                     (Boolean(prediction[1]) || prediction[1] === 0);

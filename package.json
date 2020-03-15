@@ -9,7 +9,7 @@
     "pngjs": "3.3.0"
   },
   "scripts": {
-    "test": "mocha --timeout=30000 specs/*.spec.js",
+    "test": "mocha --timeout=30000 specs/setup.js specs/*.spec.js",
     "lint": "eslint . --fix"
   },
   "devDependencies": {
