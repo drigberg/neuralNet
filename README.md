@@ -5,7 +5,7 @@ A framework for creating neural networks
 
 Cool things:
 - Only requires pngjs in production
-- Can create fully-connected and convolutional layers
+- Can create fully-connected, convolutional, and pooling layers
 - Can accept input matrices with any number of dimensions
 
 ## Usage
