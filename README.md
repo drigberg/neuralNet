@@ -41,12 +41,10 @@ const net = new Net({
 Load images and train:
 
 ```javascript
-let trainPromises = [
+Promise.all([
     net.loadImageDirectory({"directory": "./data/training_9/jedi"}),
     net.loadImageDirectory({"directory": "./data/training_9/sith"})
-]
-
-Promise.all(trainPromises)
+])
 .then(([jediImages, sithImages]) => {
     for (var i = 0; i < 100; i++) {
         net.learn(jediImages[i], [0, 1])
@@ -60,8 +58,8 @@ Implement:
 ```javascript
 net.loadImage("./data/me.png")
 .then((imageOfMe) => {
-    let jediOrSith = net.predict(imageOfMe)
-    console.log(jediOrSith)
+    const result = net.predict(imageOfMe)
+    console.log(`Jedi or sith: ${result}`)
 })
 ```
 
