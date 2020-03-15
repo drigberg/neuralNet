@@ -14,26 +14,29 @@ Create a net:
 
 ```javascript
 const net = new Net({
-    "architecture": [32, 32, 3],
-    "learning_rate": 0.00001
+    architecture: [32, 32, 3],
+    learning_rate: 0.00001,
+    layer_configs: [
+        {
+            type: 'CONVOLUTIONAL',
+            options: {
+                filter_architecture: [3, 3, 1],
+                depth: 2,
+                stride: 1,
+                rectifier: rectifiers.relu,
+            }
+        },
+        {
+            type: 'FULLY_CONNECTED',
+            options: {
+                architecture: [2],
+                rectifier: rectifiers.step,
+            }
+        }
+    ]
 })
 ```
 
-Add layers:
-
-```javascript
-net.addConvolutionalLayer({
-    "filter_structure": [3, 3, 1],
-    "depth": 2,
-    "stride": 1,
-    "rectifier": rectifiers.relu,
-})
-
-net.addFullyConnectedLayer({
-    "architecture": [2],
-    "rectifier": rectifiers.step,
-})
-```
 
 Load images and train:
 

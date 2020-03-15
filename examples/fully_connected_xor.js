@@ -4,7 +4,7 @@
  * Module dependencies
  */
 
-const {Net} = require('../models/Net');
+const {Net} = require('../lib/net');
 const rectifiers = require('../lib/rectifiers');
 
 /**
@@ -16,18 +16,24 @@ const rectifiers = require('../lib/rectifiers');
  */
 function task() {
     const net = new Net({
-        'architecture': [2],
-        'learning_rate': 0.02
-    });
-    
-    net.addFullyConnectedLayer({
-        'architecture': [3],
-        'rectifier': rectifiers.relu,
-    });
-    
-    net.addFullyConnectedLayer({
-        'architecture': [1],
-        'rectifier': rectifiers.step,
+        input_architecture: [2],
+        learning_rate: 0.02,
+        layer_configs: [
+            {
+                type: 'FULLY_CONNECTED',
+                options: {
+                    architecture: [3],
+                    rectifier: rectifiers.relu,
+                }
+            },
+            {
+                type: 'FULLY_CONNECTED',
+                options: {
+                    'architecture': [1],
+                    'rectifier': rectifiers.step,
+                }
+            }
+        ]
     });
     
     for (var i = 0; i < 80000; i++) {

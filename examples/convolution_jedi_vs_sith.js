@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-const {Net} = require('../models/Net');
+const {Net} = require('../lib/net');
 const rectifiers = require('../lib/rectifiers');
 
 /**
@@ -14,20 +14,26 @@ const rectifiers = require('../lib/rectifiers');
  */
 function task() {
     const net = new Net({
-        'architecture': [9, 9, 3],
-        'learning_rate': 0.000001
-    });
-    
-    net.addConvolutionalLayer({
-        'filter_structure': [3, 3, 1],
-        'depth': 3,
-        'stride': 1,
-        'rectifier': rectifiers.relu,
-    });
-    
-    net.addFullyConnectedLayer({
-        'architecture': [2],
-        'rectifier': rectifiers.relu,
+        input_architecture: [9, 9, 3],
+        learning_rate: 0.000001,
+        layer_configs: [
+            {
+                type: 'CONVOLUTIONAL',
+                options: {
+                    filter_architecture: [3, 3, 1],
+                    depth: 3,
+                    stride: 1,
+                    rectifier: rectifiers.relu,
+                }
+            },
+            {
+                type: 'FULLY_CONNECTED',
+                options: {
+                    architecture: [2],
+                    rectifier: rectifiers.relu,
+                }
+            }
+        ]
     });
     
     const targets = {
