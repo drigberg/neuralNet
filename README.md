@@ -41,10 +41,7 @@ const net = new Net({
 Load images and train:
 
 ```javascript
-Promise.all([
-    net.loadImageDirectory({"directory": "./data/training_9/jedi"}),
-    net.loadImageDirectory({"directory": "./data/training_9/sith"})
-])
+net.loadImageDirectories(["./data/training_9/jedi", "./data/training_9/sith"])
 .then(([jediImages, sithImages]) => {
     for (var i = 0; i < 100; i++) {
         net.learn(jediImages[i], [0, 1])
@@ -68,7 +65,6 @@ net.loadImage("./data/me.png")
 - Better name
     - dandrites-js
 - MSE
-- Pooling layers
 - Export && import weights
 - Export prediction function
 - Visualisation

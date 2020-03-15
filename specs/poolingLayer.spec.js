@@ -65,7 +65,7 @@ describe('Pooling Layers', () => {
                 ]
             });
 
-            return net.loadImage(__dirname + '/data/9x9x3.png')
+            return net.loadImage(__dirname + '/data/images/9x9x3.png')
                 .then((image) => {
                     net.learn(image, [0, 1]);
 
@@ -109,7 +109,7 @@ describe('Pooling Layers', () => {
                 ]
             });
 
-            return net.loadImage(__dirname + '/data/9x9x3.png')
+            return net.loadImage(__dirname + '/data/images/9x9x3.png')
                 .then((image) => {
                     for (let j = 0; j < 100; j++) {
                         net.learn(image, [Math.random(), Math.random()]);
@@ -155,7 +155,7 @@ describe('Pooling Layers', () => {
                 ]
             });
 
-            return net.loadImage(__dirname + '/data/9x9x3.png')
+            return net.loadImage(__dirname + '/data/images/9x9x3.png')
                 .then((image) => {
                     for (let j = 0; j < 100; j++) {
                         net.learn(image, [Math.random(), Math.random()]);
