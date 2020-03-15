@@ -333,7 +333,7 @@ describe('Fully Connected Layers', () => {
                 ]
             });
 
-            for (var j = 0; j < 100; j++) {
+            for (let j = 0; j < 100; j++) {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
 
@@ -370,7 +370,7 @@ describe('Fully Connected Layers', () => {
                 ]
             });
 
-            for (var j = 0; j < 100; j++) {
+            for (let j = 0; j < 100; j++) {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
 

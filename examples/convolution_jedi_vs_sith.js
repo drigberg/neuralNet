@@ -95,7 +95,7 @@ function task() {
     .then(([jediImages, sithImages]) => {
         return Promise.all(testPromises)
         .then(([sith, jedi, sam, claude, tim]) => {
-            for (var i = 0; i < 500000; i++) {
+            for (let i = 0; i < 500000; i++) {
                 if (Math.random() < 0.5) {
                     const jediIndex = Math.floor(Math.random() * jediImages.length);
                     net.learn(jediImages[jediIndex], targets.jedi);

@@ -36,11 +36,11 @@ function task() {
         ]
     });
     
-    for (var i = 0; i < 100000; i++) {
+    for (let i = 0; i < 100000; i++) {
         const input = [];
         let target = [0];
     
-        for (var j = 0; j < 2; j++) {
+        for (let j = 0; j < 2; j++) {
             const num = Math.random() >= 0.5 ? 1 : 0;
             input.push(num);
         }

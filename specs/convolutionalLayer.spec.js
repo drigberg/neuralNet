@@ -403,7 +403,7 @@ describe('Convolutional Layers', () => {
 
             return net.loadImage(__dirname + '/data/9x9x3.png')
             .then((image) => {
-                for (var j = 0; j < 100; j++) {
+                for (let j = 0; j < 100; j++) {
                     net.learn(image, [Math.random(), Math.random()]);
                 }
 
@@ -445,7 +445,7 @@ describe('Convolutional Layers', () => {
 
             return net.loadImage(__dirname + '/data/9x9x3.png')
             .then((image) => {
-                for (var j = 0; j < 100; j++) {
+                for (let j = 0; j < 100; j++) {
                     net.learn(image, [Math.random(), Math.random()]);
                 }
 
