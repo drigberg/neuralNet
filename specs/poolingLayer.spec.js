@@ -30,7 +30,7 @@ describe('Pooling Layers', () => {
                 ]
             });
 
-            expect(Object.keys(net.finalLayer.neurons)).to.have.length(16);
+            expect(net.finalLayer.states).to.have.length(16);
         });
     });
 
@@ -69,18 +69,12 @@ describe('Pooling Layers', () => {
                 .then((image) => {
                     net.learn(image, [0, 1]);
 
-                    const pooling_neurons = net.layers[1].neurons;
-                    const neuron_keys = Object.keys(pooling_neurons);
                     let all_numbers = true;
-
-                    for (var i = 0; i < neuron_keys.length; i++) {
-                        const activation = pooling_neurons[neuron_keys[i]].activation;
-                        if (typeof activation !== 'number') {
+                    Object.values(net.layers[1].neuronsByState).forEach((neuron) => {
+                        if (typeof neuron.activation !== 'number') {
                             all_numbers = false;
-                            break;
                         }
-                    }
-
+                    });
                     expect(all_numbers).to.be.true;
                 });
         });
@@ -121,19 +115,12 @@ describe('Pooling Layers', () => {
                         net.learn(image, [Math.random(), Math.random()]);
                     }
 
-                    const pooling_neurons = net.layers[1].neurons;
-                    const neuron_keys = Object.keys(pooling_neurons);
                     let all_zeroes = true;
-
-                    for (var i = 0; i < neuron_keys.length; i++) {
-                        const activation = pooling_neurons[neuron_keys[i]].activation;
-
-                        if (activation !== 0) {
+                    Object.values(net.layers[1].neuronsByState).forEach((neuron) => {
+                        if (neuron.activation !== 0) {
                             all_zeroes = false;
-                            break;
                         }
-                    }
-
+                    });
                     expect(all_zeroes).to.be.false;
                 });
         });

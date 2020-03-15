@@ -14,7 +14,7 @@ describe('Fully Connected Layers', () => {
                     layer_configs: [],
                 });
 
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(3);
+                expect(net.layers[0].states).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
@@ -24,7 +24,7 @@ describe('Fully Connected Layers', () => {
                     layer_configs: [],
                 });
 
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(12);
+                expect(net.layers[0].states).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
@@ -33,7 +33,7 @@ describe('Fully Connected Layers', () => {
                     input_architecture: [3, 4, 5],
                     layer_configs: [],
                 });
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(60);
+                expect(net.layers[0].states).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
@@ -42,7 +42,7 @@ describe('Fully Connected Layers', () => {
                     input_architecture: [3, 4, 5, 6],
                     layer_configs: [],
                 });
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(360);
+                expect(net.layers[0].states).to.have.length(360);
             });
         });
 
@@ -84,7 +84,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(3);
+                expect(net.finalLayer.states).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
@@ -102,7 +102,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(12);
+                expect(net.finalLayer.states).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
@@ -120,7 +120,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(60);
+                expect(net.finalLayer.states).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
@@ -138,7 +138,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(360);
+                expect(net.finalLayer.states).to.have.length(360);
             });
         });
 
@@ -195,7 +195,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(3);
+                expect(net.finalLayer.states).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
@@ -220,7 +220,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(12);
+                expect(net.finalLayer.states).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
@@ -245,7 +245,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(60);
+                expect(net.finalLayer.states).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
@@ -270,7 +270,7 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(360);
+                expect(net.finalLayer.states).to.have.length(360);
             });
         });
 
@@ -337,18 +337,14 @@ describe('Fully Connected Layers', () => {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
 
-            const conv_neurons = net.layers[0].neurons;
-            const neuron_keys = Object.keys(conv_neurons);
-            let all_numbers = true;
 
-            for (var i = 0; i < neuron_keys.length; i++) {
-                const activation = conv_neurons[neuron_keys[i]].activation;
+            let all_numbers = true;
+            net.layers[0].states.forEach((state) => {
+                const activation = net.layers[0].neuronsByState[state].activation;
                 if (typeof activation !== 'number') {
                     all_numbers = false;
-                    break;
                 }
-            }
-
+            });
             expect(all_numbers).to.be.true;
         });
 
@@ -378,19 +374,13 @@ describe('Fully Connected Layers', () => {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
 
-            const conv_neurons = net.layers[0].neurons;
-            const neuron_keys = Object.keys(conv_neurons);
             let all_zeroes = true;
-
-            for (var i = 0; i < neuron_keys.length; i++) {
-                const activation = conv_neurons[neuron_keys[i]].activation;
-
+            net.layers[0].states.forEach((state) => {
+                const activation = net.layers[0].neuronsByState[state].activation;
                 if (activation !== 0) {
                     all_zeroes = false;
-                    break;
                 }
-            }
-
+            });
             expect(all_zeroes).to.be.false;
         });
     });

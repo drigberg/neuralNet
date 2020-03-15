@@ -25,7 +25,7 @@ describe('Convolutional Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(1);
+                expect(net.finalLayer.states).to.have.length(1);
             });
 
             it('when filter is smaller than the input layer', () => {
@@ -44,7 +44,7 @@ describe('Convolutional Layers', () => {
                         }
                     ]
                 });
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(27);
+                expect(net.finalLayer.states).to.have.length(27);
             });
 
             it('with multiple filters', () => {
@@ -64,7 +64,7 @@ describe('Convolutional Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(6);
+                expect(net.finalLayer.states).to.have.length(6);
             });
 
             it('with stride > 1', () => {
@@ -84,7 +84,7 @@ describe('Convolutional Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(4);
+                expect(net.finalLayer.states).to.have.length(4);
             });
         });
 
@@ -172,7 +172,7 @@ describe('Convolutional Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(8);
+                expect(net.finalLayer.states).to.have.length(8);
             });
 
             it('when filter is smaller than the input layer', () => {
@@ -201,7 +201,7 @@ describe('Convolutional Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(64);
+                expect(net.finalLayer.states).to.have.length(64);
             });
 
             it('with multiple filters', () => {
@@ -230,7 +230,7 @@ describe('Convolutional Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(48);
+                expect(net.finalLayer.states).to.have.length(48);
             });
 
             it('with stride > 1', () => {
@@ -259,7 +259,7 @@ describe('Convolutional Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(4);
+                expect(net.finalLayer.states).to.have.length(4);
             });
         });
         describe('cannot be created', () => {
@@ -367,7 +367,7 @@ describe('Convolutional Layers', () => {
 
                 let all_numbers = true;
 
-                Object.values(net.layers[0].neurons).forEach((neuron) => {
+                Object.values(net.layers[0].neuronsByState).forEach((neuron) => {
                     if (typeof neuron.activation !== 'number') {
                         all_numbers = false;
                     }
@@ -409,7 +409,7 @@ describe('Convolutional Layers', () => {
 
                 let all_zeroes = true;
 
-                Object.values(net.layers[0].neurons).forEach((neuron) => {
+                Object.values(net.layers[0].neuronsByState).forEach((neuron) => {
                     if (neuron.activation !== 0) {
                         all_zeroes = false;
                     }
