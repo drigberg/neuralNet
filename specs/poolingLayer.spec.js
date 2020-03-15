@@ -9,13 +9,13 @@ describe('Pooling Layers', () => {
     describe('can be created', () => {
         it('when spatial extent is compatible with input architecture', () => {
             const net = new Net({
-                input_architecture: [7, 7, 7],
-                learning_rate: 0.0000002,
-                layer_configs: [
+                inputArchitecture: [7, 7, 7],
+                learningRate: 0.0000002,
+                layerConfigs: [
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_architecture: [4, 4, 4],
+                            filterArchitecture: [4, 4, 4],
                             depth: 1,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -24,7 +24,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'POOLING',
                         options: {
-                            spatial_extent: 2
+                            spatialExtent: 2
                         }
                     }
                 ]
@@ -37,13 +37,13 @@ describe('Pooling Layers', () => {
     describe('backpropagation:', () => {
         it('all activations are numbers', () => {
             const net = new Net({
-                input_architecture: [9, 9, 3],
-                learning_rate: 0.000000002,
-                layer_configs: [
+                inputArchitecture: [9, 9, 3],
+                learningRate: 0.000000002,
+                layerConfigs: [
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_architecture: [4, 4, 3],
+                            filterArchitecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -52,7 +52,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'POOLING',
                         options: {
-                            spatial_extent: 2
+                            spatialExtent: 2
                         }
                     },
                     {
@@ -69,25 +69,25 @@ describe('Pooling Layers', () => {
                 .then((image) => {
                     net.learn(image, [0, 1]);
 
-                    let all_numbers = true;
+                    let allNumbers = true;
                     Object.values(net.layers[1].neuronsByState).forEach((neuron) => {
                         if (typeof neuron.activation !== 'number') {
-                            all_numbers = false;
+                            allNumbers = false;
                         }
                     });
-                    expect(all_numbers).to.be.true;
+                    expect(allNumbers).to.be.true;
                 });
         });
 
         it('all activations are not zero', () => {
             const net = new Net({
-                input_architecture: [9, 9, 3],
-                learning_rate: 0.000000002,
-                layer_configs: [
+                inputArchitecture: [9, 9, 3],
+                learningRate: 0.000000002,
+                layerConfigs: [
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_architecture: [4, 4, 3],
+                            filterArchitecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -96,7 +96,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'POOLING',
                         options: {
-                            spatial_extent: 2
+                            spatialExtent: 2
                         }
                     },
                     {
@@ -115,25 +115,25 @@ describe('Pooling Layers', () => {
                         net.learn(image, [Math.random(), Math.random()]);
                     }
 
-                    let all_zeroes = true;
+                    let allZeroes = true;
                     Object.values(net.layers[1].neuronsByState).forEach((neuron) => {
                         if (neuron.activation !== 0) {
-                            all_zeroes = false;
+                            allZeroes = false;
                         }
                     });
-                    expect(all_zeroes).to.be.false;
+                    expect(allZeroes).to.be.false;
                 });
         });
 
         it('predictions are numbers', () => {
             const net = new Net({
-                input_architecture: [9, 9, 3],
-                learning_rate: 0.000000002,
-                layer_configs: [
+                inputArchitecture: [9, 9, 3],
+                learningRate: 0.000000002,
+                layerConfigs: [
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_architecture: [4, 4, 3],
+                            filterArchitecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -142,7 +142,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'POOLING',
                         options: {
-                            spatial_extent: 2
+                            spatialExtent: 2
                         }
                     },
                     {
@@ -162,23 +162,23 @@ describe('Pooling Layers', () => {
                     }
 
                     const prediction = net.predict(image, [Math.random(), Math.random()]);
-                    const are_numbers = typeof prediction[0] === 'number' && typeof prediction[1] === 'number';
-                    const are_not_NaN = (Boolean(prediction[0]) || prediction[0] === 0) &&
+                    const areNumbers = typeof prediction[0] === 'number' && typeof prediction[1] === 'number';
+                    const areNotNaN = (Boolean(prediction[0]) || prediction[0] === 0) &&
                         (Boolean(prediction[1]) || prediction[1] === 0);
-                    expect(are_numbers).to.be.true;
-                    expect(are_not_NaN).to.be.true;
+                    expect(areNumbers).to.be.true;
+                    expect(areNotNaN).to.be.true;
                 });
         });
 
         it('[This scenario fails! Figure out why!]', () => {
             new Net({
-                input_architecture: [9, 9, 3],
-                learning_rate: 0.000000002,
-                layer_configs: [
+                inputArchitecture: [9, 9, 3],
+                learningRate: 0.000000002,
+                layerConfigs: [
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_architecture: [4, 4, 3],
+                            filterArchitecture: [4, 4, 3],
                             depth: 2,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -187,7 +187,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'CONVOLUTIONAL',
                         options: {
-                            filter_architecture: [4, 4, 1],
+                            filterArchitecture: [4, 4, 1],
                             depth: 1,
                             stride: 1,
                             rectifier: rectifiers.relu,
@@ -196,7 +196,7 @@ describe('Pooling Layers', () => {
                     {
                         type: 'POOLING',
                         options: {
-                            spatial_extent: 3
+                            spatialExtent: 3
                         }
                     },
                     {

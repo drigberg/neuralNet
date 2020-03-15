@@ -25,6 +25,7 @@
         "jsdoc"
     ],
     "rules": {
+      "camelcase": 2,
       "no-console": 0,
       "no-undef": 2,
       "no-compare-neg-zero": 2,
