@@ -14,13 +14,13 @@ const rectifiers = require('../lib/rectifiers');
  */
 function task() {
     const net = new Net({
-        input_architecture: [9, 9, 3],
-        learning_rate: 0.000001,
-        layer_configs: [
+        inputArchitecture: [9, 9, 3],
+        learningRate: 0.000001,
+        layerConfigs: [
             {
                 type: 'CONVOLUTIONAL',
                 options: {
-                    filter_architecture: [3, 3, 1],
+                    filterArchitecture: [3, 3, 1],
                     depth: 3,
                     stride: 1,
                     rectifier: rectifiers.relu,
@@ -41,12 +41,12 @@ function task() {
         'sith': [0, 1]
     };
     
-    const train_promises = [
+    const trainPromises = [
         net.loadImageDirectory({'directory': './data/training_9/jedi'}),
         net.loadImageDirectory({'directory': './data/training_9/sith'})
     ];
     
-    const test_promises = [
+    const testPromises = [
         net.loadImageDirectory({'directory': './data/testing_9/sith'}),
         net.loadImageDirectory({'directory': './data/testing_9/jedi'}),
         net.loadImageDirectory({'directory': './data/testing_9/sam'}),
@@ -63,45 +63,45 @@ function task() {
      * @param {*} tim 
      */
     function test(sith, jedi, sam, claude, tim) {
-        sith.forEach((test_image) => {
-            const prediction = net.predict(test_image);
+        sith.forEach((testImage) => {
+            const prediction = net.predict(testImage);
             console.log('Test prediction for sith:', prediction);
         });
     
-        jedi.forEach((test_image) => {
-            const prediction = net.predict(test_image);
+        jedi.forEach((testImage) => {
+            const prediction = net.predict(testImage);
             console.log('Test prediction for jedi:', prediction);
         });
     
-        claude.forEach((test_image) => {
-            const prediction = net.predict(test_image);
+        claude.forEach((testImage) => {
+            const prediction = net.predict(testImage);
             console.log('Test prediction for claude:', prediction);
         });
     
-        tim.forEach((test_image) => {
-            const prediction = net.predict(test_image);
+        tim.forEach((testImage) => {
+            const prediction = net.predict(testImage);
             console.log('Test prediction for tim:', prediction);
         });
     
-        sam.forEach((test_image) => {
-            const prediction = net.predict(test_image);
+        sam.forEach((testImage) => {
+            const prediction = net.predict(testImage);
             console.log('Test prediction for sam:', prediction);
         });
     }
     
     let power = 1;
     
-    Promise.all(train_promises)
-    .then(([jedi_images, sith_images]) => {
-        return Promise.all(test_promises)
+    Promise.all(trainPromises)
+    .then(([jediImages, sithImages]) => {
+        return Promise.all(testPromises)
         .then(([sith, jedi, sam, claude, tim]) => {
             for (var i = 0; i < 500000; i++) {
                 if (Math.random() < 0.5) {
-                    const jedi_index = Math.floor(Math.random() * jedi_images.length);
-                    net.learn(jedi_images[jedi_index], targets.jedi);
+                    const jediIndex = Math.floor(Math.random() * jediImages.length);
+                    net.learn(jediImages[jediIndex], targets.jedi);
                 } else {
-                    const sith_index = Math.floor(Math.random() * sith_images.length);
-                    net.learn(sith_images[sith_index], targets.sith);
+                    const sithIndex = Math.floor(Math.random() * sithImages.length);
+                    net.learn(sithImages[sithIndex], targets.sith);
                 }
     
                 if (i % Math.pow(2, power) == 0) {

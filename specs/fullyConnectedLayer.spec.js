@@ -9,60 +9,60 @@ describe('Fully Connected Layers', () => {
         describe('can be created', () => {
             it('with one-dimensional architecture', () => {
                 const net = new Net({
-                    learning_rate: 0.02,
-                    input_architecture: [3],
-                    layer_configs: [],
+                    learningRate: 0.02,
+                    inputArchitecture: [3],
+                    layerConfigs: [],
                 });
 
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(3);
+                expect(net.inputLayer.states).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
                 const net = new Net({
-                    learning_rate: 0.02,
-                    input_architecture: [3, 4],
-                    layer_configs: [],
+                    learningRate: 0.02,
+                    inputArchitecture: [3, 4],
+                    layerConfigs: [],
                 });
 
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(12);
+                expect(net.inputLayer.states).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
                 const net = new Net({
-                    learning_rate: 0.02,
-                    input_architecture: [3, 4, 5],
-                    layer_configs: [],
+                    learningRate: 0.02,
+                    inputArchitecture: [3, 4, 5],
+                    layerConfigs: [],
                 });
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(60);
+                expect(net.inputLayer.states).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
                 const net = new Net({
-                    learning_rate: 0.02,
-                    input_architecture: [3, 4, 5, 6],
-                    layer_configs: [],
+                    learningRate: 0.02,
+                    inputArchitecture: [3, 4, 5, 6],
+                    layerConfigs: [],
                 });
-                expect(Object.keys(net.layers[0].neurons)).to.have.length(360);
+                expect(net.inputLayer.states).to.have.length(360);
             });
         });
 
         describe('cannot be created', () => {
             it('with empty architecture', () => {
-                let error_thrown = false;
+                let errorThrown = false;
 
                 try {
                     new Net({
-                        input_architecture: [],
-                        learning_rate: 0.02,
-                        layer_configs: []
+                        inputArchitecture: [],
+                        learningRate: 0.02,
+                        layerConfigs: []
                     });
                 }
                 catch (err) {
-                    error_thrown = true;
+                    errorThrown = true;
                     expect(err.message).to.equal('Architecture must be array with at least one dimension');
                 }
 
-                expect(error_thrown).to.equal(true);
+                expect(errorThrown).to.equal(true);
             });
         });
     });
@@ -71,9 +71,9 @@ describe('Fully Connected Layers', () => {
         describe('can be created', () => {
             it('with one-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -84,14 +84,14 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(3);
+                expect(net.finalLayer.states).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -102,14 +102,14 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(12);
+                expect(net.finalLayer.states).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -120,14 +120,14 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(60);
+                expect(net.finalLayer.states).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -138,19 +138,19 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(360);
+                expect(net.finalLayer.states).to.have.length(360);
             });
         });
 
         describe('cannot be created', () => {
             it('with undefined architecture', () => {
-                let error_thrown = false;
+                let errorThrown = false;
 
                 try {
                     new Net({
-                        input_architecture: [3],
-                        learning_rate: 0.02,
-                        layer_configs: [
+                        inputArchitecture: [3],
+                        learningRate: 0.02,
+                        layerConfigs: [
                             {
                                 type: 'FULLY_CONNECTED',
                                 options: {
@@ -162,11 +162,11 @@ describe('Fully Connected Layers', () => {
                     });
                 }
                 catch (err) {
-                    error_thrown = true;
+                    errorThrown = true;
                     expect(err.message).to.equal('Architecture must be array with at least one dimension');
                 }
 
-                expect(error_thrown).to.equal(true);
+                expect(errorThrown).to.equal(true);
             });
         });
     });
@@ -175,9 +175,9 @@ describe('Fully Connected Layers', () => {
         describe('can be created', () => {
             it('with one-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -195,14 +195,14 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(3);
+                expect(net.finalLayer.states).to.have.length(3);
             });
 
             it('with two-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -220,14 +220,14 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(12);
+                expect(net.finalLayer.states).to.have.length(12);
             });
 
             it('with three-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -245,14 +245,14 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(60);
+                expect(net.finalLayer.states).to.have.length(60);
             });
 
             it('with four-dimensional architecture', () => {
                 const net = new Net({
-                    input_architecture: [3],
-                    learning_rate: 0.02,
-                    layer_configs: [
+                    inputArchitecture: [3],
+                    learningRate: 0.02,
+                    layerConfigs: [
                         {
                             type: 'FULLY_CONNECTED',
                             options: {
@@ -270,19 +270,19 @@ describe('Fully Connected Layers', () => {
                     ]
                 });
 
-                expect(Object.keys(net.finalLayer.neurons)).to.have.length(360);
+                expect(net.finalLayer.states).to.have.length(360);
             });
         });
 
         describe('cannot be created', () => {
             it('with undefined architecture', () => {
-                let error_thrown = false;
+                let errorThrown = false;
 
                 try {
                     new Net({
-                        input_architecture: [3],
-                        learning_rate: 0.02,
-                        layer_configs: [
+                        inputArchitecture: [3],
+                        learningRate: 0.02,
+                        layerConfigs: [
                             {
                                 type: 'FULLY_CONNECTED',
                                 options: {
@@ -301,11 +301,11 @@ describe('Fully Connected Layers', () => {
                     });
                 }
                 catch (err) {
-                    error_thrown = true;
+                    errorThrown = true;
                     expect(err.message).to.equal('Architecture must be array with at least one dimension');
                 }
 
-                expect(error_thrown).to.equal(true);
+                expect(errorThrown).to.equal(true);
             });
         });
     });
@@ -313,9 +313,9 @@ describe('Fully Connected Layers', () => {
     describe('backpropagation:', () => {
         it('all activations are numbers', () => {
             const net = new Net({
-                input_architecture: [2],
-                learning_rate: 0.02,
-                layer_configs: [
+                inputArchitecture: [2],
+                learningRate: 0.02,
+                layerConfigs: [
                     {
                         type: 'FULLY_CONNECTED',
                         options: {
@@ -337,26 +337,22 @@ describe('Fully Connected Layers', () => {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
 
-            const conv_neurons = net.layers[0].neurons;
-            const neuron_keys = Object.keys(conv_neurons);
-            let all_numbers = true;
 
-            for (var i = 0; i < neuron_keys.length; i++) {
-                const activation = conv_neurons[neuron_keys[i]].activation;
+            let allNumbers = true;
+            net.inputLayer.states.forEach((state) => {
+                const activation = net.inputLayer.neuronsByState[state].activation;
                 if (typeof activation !== 'number') {
-                    all_numbers = false;
-                    break;
+                    allNumbers = false;
                 }
-            }
-
-            expect(all_numbers).to.be.true;
+            });
+            expect(allNumbers).to.be.true;
         });
 
         it('all activations are not zero', () => {
             const net = new Net({
-                input_architecture: [2],
-                learning_rate: 0.02,
-                layer_configs: [
+                inputArchitecture: [2],
+                learningRate: 0.02,
+                layerConfigs: [
                     {
                         type: 'FULLY_CONNECTED',
                         options: {
@@ -378,20 +374,14 @@ describe('Fully Connected Layers', () => {
                 net.learn([Math.random(), Math.random()], [0, 1]);
             }
 
-            const conv_neurons = net.layers[0].neurons;
-            const neuron_keys = Object.keys(conv_neurons);
-            let all_zeroes = true;
-
-            for (var i = 0; i < neuron_keys.length; i++) {
-                const activation = conv_neurons[neuron_keys[i]].activation;
-
+            let allZeroes = true;
+            net.inputLayer.states.forEach((state) => {
+                const activation = net.inputLayer.neuronsByState[state].activation;
                 if (activation !== 0) {
-                    all_zeroes = false;
-                    break;
+                    allZeroes = false;
                 }
-            }
-
-            expect(all_zeroes).to.be.false;
+            });
+            expect(allZeroes).to.be.false;
         });
     });
 });

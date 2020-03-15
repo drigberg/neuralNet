@@ -16,9 +16,9 @@ const rectifiers = require('../lib/rectifiers');
  */
 function task() {
     const net = new Net({
-        input_architecture: [2],
-        learning_rate: 0.02,
-        layer_configs: [
+        inputArchitecture: [2],
+        learningRate: 0.02,
+        layerConfigs: [
             {
                 type: 'FULLY_CONNECTED',
                 options: {
@@ -36,7 +36,7 @@ function task() {
         ]
     });
     
-    for (var i = 0; i < 80000; i++) {
+    for (var i = 0; i < 100000; i++) {
         const input = [];
         let target = [0];
     
