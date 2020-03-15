@@ -60,11 +60,10 @@ net.loadImage("./data/me.png")
 })
 ```
 
-## To-Do List
-
-- Better name
-    - dandrites-js
+## Planned Updates
 - MSE
 - Export && import weights
-- Export prediction function
+
+## Possible Updates
 - Visualisation
+- Live demo
