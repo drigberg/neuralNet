@@ -4,7 +4,7 @@
 A framework for creating neural networks
 
 Cool things:
-- Only requires lodash and pngjs (and chai, for testing)
+- Only requires pngjs (+ chai and eslint for development)
 - Can create fully-connected and convolutional layers
 - Can accept input matrices with any number of dimensions
 
