@@ -63,7 +63,6 @@ net.loadImage("./data/me.png")
 ## Planned Updates
 - MSE
 - Export && import weights
-- Implement logger with cpu usage metrics
 - Silence logs during tests
 
 ## Possible Updates
